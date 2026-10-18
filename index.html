@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ポケモン・技データ検索</title>
+  
+  <!-- 同階層の外部データファイルを読み込み -->
+  <script src="data.js"></script>
+  <script src="move.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f4f5f7;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 2px solid #2c3e50;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 詳細検索ボタン（リンク） */
+    .advanced-search-toggle-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      background-color: #e2e8f0;
+      color: #2c3e50;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .advanced-search-toggle-btn:hover {
+      background-color: #cbd5e1;
+    }
+
+    /* モード切り替えボタンエリア */
+    .mode-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      border: 2px solid #2c3e50;
+      border-radius: 8px;
+      background-color: #ffffff;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .mode-btn:hover {
+      background-color: #edf2f7;
+    }
+
+    .mode-btn.active {
+      background-color: #2c3e50;
+      color: #ffffff;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 40px 14px 18px;
+      font-size: 16px;
+      border: 2px solid #2c3e50;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease;
+      background-color: #fafafa;
+    }
+
+    .search-input:focus {
+      border-color: #3498db;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #cbd5e1;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: all 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .clear-btn:hover {
+      background-color: #94a3b8;
+      color: #0f172a;
+    }
+
+    .clear-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .suggestions-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 2px solid #2c3e50;
+      border-radius: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 50;
+      list-style: none;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .suggestions-list.active {
+      display: block;
+    }
+
+    .suggestion-item {
+      padding: 12px 18px;
+      cursor: pointer;
+      border-bottom: 1px solid #edf2f7;
+      transition: background-color 0.15s ease;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-item:hover,
+    .suggestion-item.selected {
+      background-color: #ebf8ff;
+      color: #2b6cb0;
+      font-weight: 600;
+    }
+
+    .result-display {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 2px dashed #cbd5e0;
+      border-radius: 8px;
+      padding: 24px;
+      width: 100%;
+      background-color: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .result-display.has-data {
+      border: 2px solid #2c3e50;
+      border-style: solid;
+      align-items: flex-start;
+      text-align: left;
+      background-color: #ffffff;
+    }
+
+    .title-display {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      width: 100%;
+      padding-bottom: 14px;
+      border-bottom: 2px dashed #2c3e50;
+      color: #1a202c;
+      text-align: left;
+    }
+
+    .title-display .primary-name {
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .detail-display {
+      font-size: 16px;
+      line-height: 1.8;
+      width: 100%;
+      color: #2d3748;
+      text-align: left;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 6px;
+      text-transform: uppercase;
+    }
+
+    .badge-pokemon {
+      background-color: #feebc8;
+      color: #9c4221;
+    }
+
+    .badge-move {
+      background-color: #e2e8f0;
+      color: #2d3748;
+    }
+
+    .effect-group {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #cbd5e0;
+    }
+
+    .pokemon-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px 8px;
+      margin-top: 6px;
+    }
+
+    .pokemon-grid-item {
+      font-size: calc(1rem - 4pt); 
+      line-height: 1.3;
+      padding: 4px 2px;
+      word-break: normal;
+      overflow-wrap: break-word;
+      text-align: left;
+    }
+
+    .placeholder-text {
+      color: #a0aec0;
+      font-size: 15px;
+      line-height: 1.6;
+      width: 100%;
+      text-align: center;
+    }
+
+    .space-y-1 > * + * {
+      margin-top: 4px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+        align-items: flex-start; /* キーボード表示時の位置ズレ防止 */
+      }
+      .card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title">
+        <span>🔍</span> ポケモン・技データ検索
+      </h1>
+      <!-- リンクで詳細検索ページへ遷移 -->
+      <a href="ad_search.html" class="advanced-search-toggle-btn">詳細検索</a>
+    </div>
+
+    <!-- 和英・英和 切り替えボタン -->
+    <div class="mode-selector">
+      <button type="button" id="btnJaToEn" class="mode-btn active">和 → 英</button>
+      <button type="button" id="btnEnToJa" class="mode-btn">英 → 和</button>
+    </div>
+
+    <!-- 検索入力エリア -->
+    <div class="input-wrapper">
+      <input 
+        type="text" 
+        id="searchInput" 
+        class="search-input" 
+        placeholder="名称を入力 (例: ふし, x, 0, :)" 
+        autocomplete="off"
+      >
+      <button type="button" id="clearBtn" class="clear-btn" aria-label="検索内容をクリア">✕</button>
+      <ul id="suggestions" class="suggestions-list"></ul>
+    </div>
+
+    <!-- 結果表示エリア -->
+    <div id="resultDisplay" class="result-display">
+      <div class="placeholder-text">
+        ポケモン, 技を入力し選択すると<br>英名及びデータが表示されます
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const DEFAULT_POKEMON_DATA = {};
+  const DEFAULT_MOVES = {};
+
+  const TYPE_NAME_EN = {
+    "ノーマル": "Normal", "ほのお": "Fire", "みず": "Water", "くさ": "Grass",
+    "でんき": "Electric", "こおり": "Ice", "かくとう": "Fighting", "どく": "Poison",
+    "じめん": "Ground", "ひこう": "Flying", "エスパー": "Psychic", "むし": "Bug",
+    "いわ": "Rock", "ゴースト": "Ghost", "ドラゴン": "Dragon", "あく": "Dark",
+    "はがね": "Steel", "フェアリー": "Fairy"
+  };
+
+  const searchInput = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearBtn');
+  const suggestionsList = document.getElementById('suggestions');
+  const resultDisplay = document.getElementById('resultDisplay');
+  const btnJaToEn = document.getElementById('btnJaToEn');
+  const btnEnToJa = document.getElementById('btnEnToJa');
+
+  let currentMode = 'jaToEn';
+  let currentSelectedItem = null;
+
+  const INITIAL_PLACEHOLDER_HTML = `
+    <div class="placeholder-text">
+      ポケモン, 技を入力し選択すると<br>英名及びデータが表示されます
+    </div>
+  `;
+
+  let selectedIndex = -1;
+  let currentMatches = [];
+  let isComposing = false;
+  let justComposed = false;
+
+  btnJaToEn.addEventListener('click', () => setMode('jaToEn'));
+  btnEnToJa.addEventListener('click', () => setMode('enToJa'));
+
+  function setMode(mode) {
+    if (currentMode === mode) return;
+    currentMode = mode;
+
+    if (currentMode === 'jaToEn') {
+      btnJaToEn.classList.add('active');
+      btnEnToJa.classList.remove('active');
+      searchInput.placeholder = "名称を入力 (例: ふし, x, 0, :)";
+    } else {
+      btnEnToJa.classList.add('active');
+      btnJaToEn.classList.remove('active');
+      searchInput.placeholder = "Enter English name (e.g. Bulba, Yawn)";
+    }
+
+    if (currentSelectedItem) {
+      renderDetail(currentSelectedItem);
+    }
+
+    if (suggestionsList.classList.contains('active')) {
+      performSearch();
+    }
+  }
+
+  function toggleClearButton() {
+    if (searchInput.value.trim().length > 0) {
+      clearBtn.classList.add('visible');
+    } else {
+      clearBtn.classList.remove('visible');
+    }
+  }
+
+  function resetAll() {
+    searchInput.value = '';
+    currentSelectedItem = null;
+    toggleClearButton();
+    hideSuggestions();
+
+    resultDisplay.classList.remove('has-data');
+    resultDisplay.innerHTML = INITIAL_PLACEHOLDER_HTML;
+
+    searchInput.focus();
+  }
+
+  function normalizeText(str) {
+    if (!str) return '';
+    let s = str.normalize('NFKC');
+    s = s.replace(/[xｘXＸ]/g, 'X')
+         .replace(/[yｙYＹ]/g, 'Y')
+         .replace(/[zｚZＺ]/g, 'Z');
+    s = s.toUpperCase();
+    return s.replace(/[\u30a1-\u30f6]/g, (match) => {
+      const code = match.charCodeAt(0);
+      if (code >= 0x30a1 && code <= 0x30f6) {
+        return String.fromCharCode(code - 0x60);
+      }
+      return match;
+    });
+  }
+
+  searchInput.addEventListener('compositionstart', () => { isComposing = true; });
+  searchInput.addEventListener('compositionend', () => { 
+    isComposing = false; 
+    justComposed = true; 
+    setTimeout(() => { justComposed = false; }, 50);
+  });
+
+  searchInput.addEventListener('input', performSearch);
+
+  function performSearch() {
+    const query = searchInput.value.trim();
+    selectedIndex = -1;
+    toggleClearButton();
+
+    if (!query) {
+      hideSuggestions();
+      return;
+    }
+
+    const allCandidates = [];
+
+    const pokemonData = (typeof POKEMON_DATA !== 'undefined') ? POKEMON_DATA : DEFAULT_POKEMON_DATA;
+    Object.keys(pokemonData).forEach((key, index) => {
+      const p = pokemonData[key];
+      if (p && p.name) {
+        allCandidates.push({
+          category: 'pokemon',
+          name: p.name,
+          nameEn: p.nameEn || p.name_en || '',
+          dex: p.dex || 9999,
+          raw: p,
+          order: index
+        });
+      }
+    });
+
+    const moveData = (typeof MOVES !== 'undefined') ? MOVES : DEFAULT_MOVES;
+    let moveIndex = allCandidates.length;
+    const addMoves = (moveObj) => {
+      if (!moveObj) return;
+      Object.keys(moveObj).forEach(moveName => {
+        const item = moveObj[moveName];
+        allCandidates.push({
+          category: 'move',
+          name: moveName,
+          nameEn: item.nameEn || item.name_en || '',
+          raw: item,
+          order: moveIndex++
+        });
+      });
+    };
+    addMoves(moveData.fast);
+    addMoves(moveData.special);
+
+    const normalizedQuery = normalizeText(query);
+
+    const matches = allCandidates.filter(item => {
+      const targetText = currentMode === 'jaToEn' ? item.name : item.nameEn;
+      const normText = normalizeText(targetText);
+      return normText.includes(normalizedQuery);
+    });
+
+    matches.sort((a, b) => {
+      if (a.category !== b.category) {
+        return a.category === 'pokemon' ? -1 : 1;
+      }
+      if (a.dex !== b.dex) {
+        return a.dex - b.dex;
+      }
+      return a.order - b.order;
+    });
+
+    currentMatches = matches;
+    renderSuggestions(currentMatches);
+  }
+
+  clearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetAll();
+  });
+
+  function renderSuggestions(matches) {
+    suggestionsList.innerHTML = '';
+
+    if (matches.length === 0) {
+      hideSuggestions();
+      return;
+    }
+
+    matches.forEach((item) => {
+      const li = document.createElement('li');
+      li.className = 'suggestion-item';
+      
+      const badgeClass = item.category === 'pokemon' ? 'badge-pokemon' : 'badge-move';
+      const badgeLabel = item.category === 'pokemon' ? 'ポケモン' : '技';
+
+      const mainName = currentMode === 'jaToEn' ? item.name : item.nameEn;
+      const subName = currentMode === 'jaToEn' ? item.nameEn : item.name;
+      const displayLabel = subName ? `${mainName} (${subName})` : mainName;
+
+      li.innerHTML = `
+        <span>${displayLabel}</span>
+        <span class="badge ${badgeClass}">${badgeLabel}</span>
+      `;
+      
+      li.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        selectItem(item);
+      });
+      suggestionsList.appendChild(li);
+    });
+
+    suggestionsList.classList.add('active');
+  }
+
+  function hideSuggestions() {
+    suggestionsList.classList.remove('active');
+    suggestionsList.innerHTML = '';
+  }
+
+  function selectItem(item) {
+    currentSelectedItem = item;
+    
+    const primary = currentMode === 'jaToEn' ? item.name : item.nameEn;
+    const secondary = currentMode === 'jaToEn' ? item.nameEn : item.name;
+    const inputValue = secondary ? `${primary} : ${secondary}` : primary;
+    
+    searchInput.value = inputValue;
+    toggleClearButton();
+    hideSuggestions();
+    searchInput.blur();
+
+    renderDetail(item);
+  }
+
+  function getMoveDisplayName(jpName, isLegacy, category) {
+    let displayName = jpName;
+
+    if (currentMode === 'enToJa') {
+      const moveData = (typeof MOVES !== 'undefined') ? MOVES : DEFAULT_MOVES;
+      const categoryObj = moveData[category];
+      if (categoryObj && categoryObj[jpName] && categoryObj[jpName].nameEn) {
+        displayName = categoryObj[jpName].nameEn;
+      }
+    }
+
+    if (isLegacy) {
+      displayName += '*';
+    }
+
+    return displayName;
+  }
+
+  function formatTypes(types) {
+    if (!types) return '';
+    const typeArr = Array.isArray(types) ? types : [types];
+    
+    if (currentMode === 'enToJa') {
+      return typeArr.map(t => TYPE_NAME_EN[t] || t).join(' / ');
+    } else {
+      return typeArr.join(' / ');
+    }
+  }
+
+  function renderDetail(item) {
+    resultDisplay.classList.add('has-data');
+
+    const primary = currentMode === 'jaToEn' ? item.name : item.nameEn;
+    const secondary = currentMode === 'jaToEn' ? item.nameEn : item.name;
+
+    const titleText = secondary ? `${primary} : ${secondary}` : primary;
+
+    let html = `<div class="title-display"><div class="primary-name">${titleText}</div></div>`;
+    html += `<div class="detail-display">`;
+
+    const data = item.raw;
+
+    if (item.category === 'pokemon') {
+      const isEn = currentMode === 'enToJa';
+      const labelDex = isEn ? 'Dex' : '図鑑番号';
+      const labelType = isEn ? 'Type' : 'タイプ';
+      const labelFast = isEn ? 'Fast' : '技1';
+      const labelCharge = isEn ? 'Charge' : '技2';
+
+      const infoHtml = [];
+      if (data.dex) infoHtml.push(`<div>${labelDex} : ${data.dex}</div>`);
+      if (data.types) {
+        infoHtml.push(`<div>${labelType} : ${formatTypes(data.types)}</div>`);
+      }
+
+      html += `<div class="space-y-1">${infoHtml.join('')}</div>`;
+
+      const formatByWidth = (str, maxWidth = 8) => {
+        if (!str) return '';
+        const isClosingBracket = (ch) => /^[\*\)\}\]\>）】〕」』］＞]/.test(ch);
+        
+        let result = '';
+        let currentWidth = 0;
+
+        for (let i = 0; i < str.length; i++) {
+          const char = str[i];
+          const nextChar = str[i + 1] || '';
+          const charWidth = char.match(/[^\x01-\x7E\xA1-\xDF]/) ? 1 : 0.5;
+
+          if (currentWidth + charWidth > maxWidth && currentWidth > 0) {
+            if (isClosingBracket(char) || isClosingBracket(nextChar)) {
+              result += char;
+              currentWidth += charWidth;
+              continue;
+            }
+            result += '<br>';
+            currentWidth = 0;
+          }
+
+          result += char;
+          currentWidth += charWidth;
+        }
+
+        return result;
+      };
+
+      const renderMoveGridSection = (label, moveList = [], legacyList = [], category) => {
+        const moves = [];
+
+        moveList.forEach(name => {
+          moves.push({ name: getMoveDisplayName(name, false, category) });
+        });
+        legacyList.forEach(name => {
+          moves.push({ name: getMoveDisplayName(name, true, category) });
+        });
+
+        if (moves.length === 0) return '';
+
+        const itemsHtml = moves.map(m => {
+          const formattedName = formatByWidth(m.name, 8);
+          return `<div class="pokemon-grid-item">${formattedName}</div>`;
+        }).join('');
+
+        return `
+          <div class="effect-group">
+            <div style="font-weight: bold; margin-bottom: 6px;">${label}</div>
+            <div class="pokemon-grid">
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      };
+
+      html += renderMoveGridSection(labelFast, data.move1, data.LegacyMove1, 'fast');
+      html += renderMoveGridSection(labelCharge, data.move2, data.LegacyMove2, 'special');
+
+    } else if (item.category === 'move') {
+      const isEn = currentMode === 'enToJa';
+      const labelType = isEn ? 'Type' : 'タイプ';
+      const labelPwr = isEn ? 'Power' : '威力';
+      const labelEng = isEn ? 'Energy' : 'ゲージ';
+      const labelTurns = isEn ? 'Turns' : 'ターン';
+
+      const typeDisplay = isEn ? (TYPE_NAME_EN[data.type] || data.type) : data.type;
+
+      const line1 = [];
+      if (data.type) line1.push(`${labelType} : ${typeDisplay}`);
+      if (data.pwr !== undefined) line1.push(`${labelPwr} : ${data.pwr}`);
+
+      const line2 = [];
+      if (data.eng !== undefined) line2.push(`${labelEng} : ${data.eng}`);
+      if (data.turns !== undefined) line2.push(`${labelTurns} : ${data.turns}`);
+
+      if (line1.length > 0) html += `<div>${line1.join(', ')}</div>`;
+      if (line2.length > 0) html += `<div>${line2.join(', ')}</div>`;
+
+      if (data.effects && data.effects.length > 0) {
+        html += `<div class="effect-group">`;
+        data.effects.forEach(eff => {
+          let targetStr = '';
+          let statStr = '';
+          if (isEn) {
+            targetStr = eff.target === 'opponent' ? "Opponent's " : "User's ";
+            statStr = eff.stat === 'def' ? 'Defense' : (eff.stat === 'atk' ? 'Attack' : eff.stat);
+          } else {
+            targetStr = eff.target === 'opponent' ? '相手の' : '自身の';
+            statStr = eff.stat === 'def' ? '防御' : (eff.stat === 'atk' ? '攻撃' : eff.stat);
+          }
+          const stageStr = eff.stage > 0 ? `+${eff.stage}` : `${eff.stage}`;
+          html += `<div>${targetStr}${statStr} : ${stageStr}</div>`;
+        });
+
+        if (data.chance !== undefined) {
+          const labelChance = isEn ? 'Chance' : '確率';
+          html += `<div>${labelChance} : ${data.chance * 100}%</div>`;
+        }
+        html += `</div>`;
+      }
+
+      const pokemonData = (typeof POKEMON_DATA !== 'undefined') ? POKEMON_DATA : DEFAULT_POKEMON_DATA;
+      const moveNameJp = item.name;
+
+      const learningPokemonList = [];
+
+      Object.keys(pokemonData).forEach((key, index) => {
+        const p = pokemonData[key];
+        if (!p || !p.name) return;
+
+        const hasMove = 
+          (p.move1 && p.move1.includes(moveNameJp)) ||
+          (p.move2 && p.move2.includes(moveNameJp)) ||
+          (p.LegacyMove1 && p.LegacyMove1.includes(moveNameJp)) ||
+          (p.LegacyMove2 && p.LegacyMove2.includes(moveNameJp));
+
+        if (hasMove) {
+          const pName = isEn ? (p.nameEn || p.name_en || p.name) : p.name;
+          learningPokemonList.push({
+            name: pName,
+            dex: p.dex || 9999,
+            order: index
+          });
+        }
+      });
+
+      learningPokemonList.sort((a, b) => {
+        if (a.dex !== b.dex) return a.dex - b.dex;
+        return a.order - b.order;
+      });
+
+      if (learningPokemonList.length > 0) {
+        const labelPokemonList = isEn ? 'Learned by' : '習得ポケモン一覧';
+
+        const formatByWidth = (str, maxWidth = 6) => {
+          if (!str) return '';
+          const isClosingBracket = (ch) => /^[\*\)\}\]\>）】〕」』］＞]/.test(ch);
+          
+          let result = '';
+          let currentWidth = 0;
+
+          for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            const nextChar = str[i + 1] || '';
+            const charWidth = char.match(/[^\x01-\x7E\xA1-\xDF]/) ? 1 : 0.5;
+
+            if (currentWidth + charWidth > maxWidth && currentWidth > 0) {
+              if (isClosingBracket(char) || isClosingBracket(nextChar)) {
+                result += char;
+                currentWidth += charWidth;
+                continue;
+              }
+              result += '<br>';
+              currentWidth = 0;
+            }
+
+            result += char;
+            currentWidth += charWidth;
+          }
+
+          return result;
+        };
+
+        const itemsHtml = learningPokemonList.map(item => {
+          const formattedName = formatByWidth(item.name, 6);
+          return `<div class="pokemon-grid-item">${formattedName}</div>`;
+        }).join('');
+
+        html += `
+          <div class="effect-group">
+            <div style="font-weight: bold; margin-bottom: 6px;">${labelPokemonList}</div>
+            <div class="pokemon-grid">
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    html += `</div>`;
+    resultDisplay.innerHTML = html;
+  }
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (isComposing || justComposed) return;
+
+    const items = suggestionsList.querySelectorAll('.suggestion-item');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIndex = (selectedIndex + 1) % items.length;
+      updateSelection(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+      updateSelection(items);
+    } else if (e.key === 'Enter') {
+      if (selectedIndex >= 0 && selectedIndex < currentMatches.length) {
+        e.preventDefault();
+        selectItem(currentMatches[selectedIndex]);
+      }
+    }
+  });
+
+  function updateSelection(items) {
+    items.forEach((item, index) => {
+      if (index === selectedIndex) {
+        item.classList.add('selected');
+        item.scrollIntoView({ block: 'nearest' });
+      } else {
+        item.classList.remove('selected');
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!searchInput.contains(e.target) && !suggestionsList.contains(e.target)) {
+      hideSuggestions();
+    }
+  });
+</script>
+
+</body>
+</html>
