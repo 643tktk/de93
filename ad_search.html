@@ -259,13 +259,13 @@
       width: 100%;
       max-width: 600px;
       display: flex;
-      gap: 12px;
+      gap: 12px; /* ボタン同士の隙間 */
     }
 
     .exec-btn {
-      flex: 3;
-      padding: 12px;
-      font-size: 16px;
+      flex: 2; /* 検索ボタンの幅比率(一括クリアに対する比率) */
+      padding: 8px; /* ボタンの高さ・大きさ */
+      font-size: 12px; /* 検索の文字サイズ */
       font-weight: 700;
       background-color: #2c3e50;
       color: #fff;
@@ -278,9 +278,9 @@
     }
 
     .reset-btn {
-      flex: 1;
-      padding: 12px;
-      font-size: 16px;
+      flex: 1; /* 一括クリアボタンの幅比率(検索ボタンに対する比率) */
+      padding: 8px; /* ボタンの高さ・大きさ */
+      font-size: 12px; /* 一括クリアの文字サイズ */
       font-weight: 700;
       background-color: #ffffff;
       color: #2c3e50;
@@ -988,7 +988,13 @@
     
     // 発生確率の取得 (技データ直下の chance プロパティを参照)
     const probVal = mData.chance;
-    const probText = (probVal !== undefined && probVal !== null) ? ` (${Math.round(probVal * 100)}%)` : '';
+    let probText = '';
+    if (probVal !== undefined && probVal !== null) {
+      const percent = probVal * 100;
+      // 整数ならそのまま、小数（.5など）がある場合は小数点第1位まで表示する
+      const formattedPercent = Number.isInteger(percent) ? percent : percent.toFixed(1);
+      probText = ` (${formattedPercent}%)`;
+    }
 
     const textList = mData.effects.map(e => {
       const target = e.target === 'self' ? '自身' : e.target === 'opponent' ? '相手' : e.target;
@@ -998,7 +1004,6 @@
       return `${target}${stat}${stage}`;
     });
 
-    // 例: "自身攻撃+1 / 自身防御+1(10%)"
     return `${textList.join(' / ')}${probText}`;
   }
 
@@ -1207,9 +1212,10 @@
       if (clearBtn) clearBtn.classList.add('visible');
     }
 
+    // ハイライト表示とスクロール追従の更新
     function updateHighlight() {
       const items = sugListEl.querySelectorAll('.adv-suggestion-item');
-      items.forEach((index, item) => {
+      items.forEach((item, index) => {
         if (index === selectedIndex) {
           item.classList.add('selected');
           item.scrollIntoView({ block: 'nearest' });
@@ -1222,13 +1228,16 @@
     inputEl.addEventListener('input', renderSuggestions);
     inputEl.addEventListener('focus', () => {
       hideAllAdvSuggestions();
-      // 入力値がある場合のみサジェスト候補を表示する
       if (inputEl.value.trim().length > 0) {
         renderSuggestions();
       }
     });
 
+    // キーボード操作 (矢印キー・Enter・Escape)
     inputEl.addEventListener('keydown', (e) => {
+      // IME変換中のEnterや矢印キー操作を無視する
+      if (e.isComposing) return;
+
       if (!sugListEl.classList.contains('active')) return;
 
       const items = sugListEl.querySelectorAll('.adv-suggestion-item');
@@ -1251,6 +1260,7 @@
         }
       } else if (e.key === 'Escape') {
         sugListEl.classList.remove('active');
+        sugListEl.innerHTML = '';
         selectedIndex = -1;
       }
     });
