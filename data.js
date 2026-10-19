@@ -10257,9 +10257,9 @@ const POKEMON_DATA = {
     "774-meteor":        {"dex":  774,"name": "メテノ(りゅうせい)", "nameEn": "Minior (Meteor)",
         "types": ["いわ", "ひこう"],
         "stats": { "atk": 116, "def": 194, "hp": 155 },
-        "move1": [],
+        "move1": ["とっしん", "ころがる"],
         "LegacyMove1": [],
-        "move2": [],
+        "move2": ["アクロバット", "げんしのちから", "パワージェム"],
         "LegacyMove2": [],
         "released": true,
         "category": ["normal"]
@@ -10267,9 +10267,9 @@ const POKEMON_DATA = {
     "774-core":          {"dex":  774,"name": "メテノ(コア)", "nameEn": "Minior (Rock)",
         "types": ["いわ", "ひこう"],
         "stats": { "atk": 218, "def": 131, "hp": 155 },
-        "move1": [],
+        "move1": ["とっしん", "ころがる"],
         "LegacyMove1": [],
-        "move2": [],
+        "move2": ["アクロバット", "げんしのちから", "パワージェム"],
         "LegacyMove2": [],
         "released": true,
         "category": ["normal"]
