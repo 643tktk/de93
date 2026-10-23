@@ -1097,7 +1097,7 @@ const MOVES = {
             chance: 0.1 },
         "あやしいかぜ+": {
             nameEn: "Ominouos Wind",
-            type: "ゴースト", pwr: 50, eng: 45,
+            type: "ゴースト", pwr: 50, eng: 40,
             effects: [{ target: "self",     stat: "atk", stage:  1},
                       { target: "self",     stat: "def", stage:  1}],
             chance: 0.1 },
@@ -1131,7 +1131,7 @@ const MOVES = {
             type: "ゴースト", pwr: 70, eng: 45 },
         "ナイトヘッド+": {
             nameEn: "Night Shade",
-            type: "ゴースト", pwr: 55, eng: 45 },
+            type: "ゴースト", pwr: 55, eng: 40 },
         "ふんどのこぶし": {
             nameEn: "Rage Fist",
             type: "ゴースト", pwr: 55, eng: 40,
