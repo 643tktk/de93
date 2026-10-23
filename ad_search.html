@@ -259,13 +259,13 @@
       width: 100%;
       max-width: 600px;
       display: flex;
-      gap: 12px; /* ボタン同士の隙間 */
+      gap: 12px;
     }
 
     .exec-btn {
-      flex: 2; /* 検索ボタンの幅比率(一括クリアに対する比率) */
-      padding: 8px; /* ボタンの高さ・大きさ */
-      font-size: 12px; /* 検索の文字サイズ */
+      flex: 2;
+      padding: 8px;
+      font-size: 12px;
       font-weight: 700;
       background-color: #2c3e50;
       color: #fff;
@@ -278,9 +278,9 @@
     }
 
     .reset-btn {
-      flex: 1; /* 一括クリアボタンの幅比率(検索ボタンに対する比率) */
-      padding: 8px; /* ボタンの高さ・大きさ */
-      font-size: 12px; /* 一括クリアの文字サイズ */
+      flex: 1;
+      padding: 8px;
+      font-size: 12px;
       font-weight: 700;
       background-color: #ffffff;
       color: #2c3e50;
@@ -370,7 +370,6 @@
     }
 
     /* --- 検索結果エリアのCSS調整 --- */
-    /* 検索条件サマリー表示エリア */
     .applied-conditions-box {
       background-color: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -455,7 +454,6 @@
       border-bottom: none;
     }
 
-    /* 1行目: ポケモン基本情報 */
     .result-pokemon-row {
       display: flex;
       align-items: center;
@@ -490,7 +488,6 @@
       flex: 1;
     }
 
-    /* 2行目以降: 該当技情報 */
     .result-move-row {
       display: flex;
       align-items: center;
@@ -609,103 +606,99 @@
       pointer-events: auto;
       visibility: visible;
     }
-/* スマートフォン向けレスポンシブ対応 */
-@media (max-width: 480px) {
-  body {
-    padding: 8px;
-    padding-bottom: 90px;
-  }
 
-  .card {
-    padding: 16px;
-  }
+    /* スマートフォン向けレスポンシブ対応 */
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+        padding-bottom: 90px;
+      }
 
-  /* 検索結果1行目の折り返し対応 */
-  .result-pokemon-row {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
+      .card {
+        padding: 16px;
+      }
 
-  .result-dex-badge {
-    width: auto;
-    min-width: 70px;
-  }
+      .result-pokemon-row {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
 
-  .result-name-badge,
-  .result-type-badge {
-    flex: 1 1 40%;
-  }
+      .result-dex-badge {
+        width: auto;
+        min-width: 70px;
+      }
 
-  /* 検索結果2行目（技情報）のレイアウト調整 */
-  .result-move-row {
-    font-size: 12px;
-    padding-left: 4px;
-  }
+      .result-name-badge,
+      .result-type-badge {
+        flex: 1 1 40%;
+      }
 
-  .result-move-name {
-    width: 90px;
-  }
+      .result-move-row {
+        font-size: 12px;
+        padding-left: 4px;
+      }
 
-  .result-move-type {
-    width: 70px;
-  }
+      .result-move-name {
+        width: 90px;
+      }
 
-  /* カテゴリ選択（メガシンカ等）のラベル調整 */
-  .category-label {
-    width: 90px;
-    font-size: 13px;
-    text-align: center;
-    padding-left: 0;
-  }
-}
+      .result-move-type {
+        width: 70px;
+      }
 
-/* 画面上部固定バー */
-.sticky-top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px 16px;
-  background-color: rgba(244, 245, 247, 0.9);
-  backdrop-filter: blur(4px);
-  border-bottom: 1px solid #cbd5e1;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      .category-label {
+        width: 90px;
+        font-size: 13px;
+        text-align: center;
+        padding-left: 0;
+      }
+    }
 
-  /* 初期状態は非表示（透明＆クリック不可） */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
+    /* 画面上部固定バー */
+    .sticky-top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 10px 16px;
+      background-color: rgba(244, 245, 247, 0.9);
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid #cbd5e1;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
 
-/* スクロール時に付与するクラス */
-.sticky-top-bar.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
+    .sticky-top-bar.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-.change-cond-btn {
-  width: 100%;
-  max-width: 600px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #2c3e50;
-  background-color: #ffffff;
-  border: 2px solid #2c3e50;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
+    .change-cond-btn {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #2c3e50;
+      background-color: #ffffff;
+      border: 2px solid #2c3e50;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
 
-.change-cond-btn:hover {
-  background-color: #f1f5f9;
-}
+    .change-cond-btn:hover {
+      background-color: #f1f5f9;
+    }
   </style>
 </head>
 <body>
+
 <!-- 画面上部固定：検索条件を変更するボタン -->
 <div class="sticky-top-bar" id="stickyTopBar">
   <button type="button" class="change-cond-btn" id="changeCondBtn">検索条件を変更する</button>
@@ -784,20 +777,33 @@
 
     <div class="divider"></div>
 
-    <!-- 1. タイプ -->
+    <!-- 1-1. 所有タイプ -->
     <div>
-      <div class="section-title">・ タイプ</div>
-      <div id="typeInputsContainer"></div>
-      <button type="button" class="add-btn" id="addTypeBtn">項目追加 (最大4つまで)</button>
+      <div class="section-title">・ 所有タイプ</div>
+      <div id="posTypeInputsContainer"></div>
+      <button type="button" class="add-btn" id="addPosTypeBtn">項目追加 (最大4つまで)</button>
 
       <div class="checkbox-group" style="margin-top: 8px;">
-        <label class="checkbox-label"><input type="checkbox" id="typeOrSearch"> OR検索</label>
+        <label class="checkbox-label"><input type="checkbox" id="posTypeOrSearch"> OR検索</label>
       </div>
 
       <div class="pill-selector" style="margin-top: 8px;">
         <button type="button" class="pill-btn active" data-value="all" id="typeCategoryAll">すべて</button>
         <button type="button" class="pill-btn" data-value="single" id="typeCategorySingle">単タイプ</button>
         <button type="button" class="pill-btn" data-value="dual" id="typeCategoryDual">複合タイプ</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 1-2. タイプ相性 -->
+    <div>
+      <div class="section-title">・ タイプ相性</div>
+      <div id="affinityInputsContainer"></div>
+      <button type="button" class="add-btn" id="addAffinityBtn">項目追加 (最大4つまで)</button>
+
+      <div class="checkbox-group" style="margin-top: 8px;">
+        <label class="checkbox-label"><input type="checkbox" id="affinityOrSearch"> OR検索</label>
       </div>
     </div>
 
@@ -902,16 +908,15 @@
   </div>
 </div>
 
-<!-- 条件設定 Popover -->
-<div class="cond-popover" id="condPopover">
-  <div class="popover-header">所持タイプ</div>
+<!-- 所有タイプ用 Popover -->
+<div class="cond-popover" id="posCondPopover">
   <div class="cond-option selected" data-group="possession" data-value="一致"><span class="check-icon">✓</span>一致</div>
   <div class="cond-option" data-group="possession" data-value="除外"><span class="check-icon">✓</span>除外</div>
-  
-  <div class="divider" style="margin:4px 0;"></div>
-  
-  <div class="popover-header">タイプ相性</div>
-  <div class="cond-option" data-group="affinity" data-value="二重弱点"><span class="check-icon">✓</span>二重弱点</div>
+</div>
+
+<!-- タイプ相性用 Popover -->
+<div class="cond-popover" id="affinityCondPopover">
+  <div class="cond-option selected" data-group="affinity" data-value="二重弱点"><span class="check-icon">✓</span>二重弱点</div>
   <div class="cond-option" data-group="affinity" data-value="弱点"><span class="check-icon">✓</span>弱点</div>
   <div class="cond-option" data-group="affinity" data-value="等倍"><span class="check-icon">✓</span>等倍</div>
   <div class="cond-option" data-group="affinity" data-value="耐性"><span class="check-icon">✓</span>耐性</div>
@@ -919,7 +924,7 @@
   <div class="cond-option" data-group="affinity" data-value="三重耐性"><span class="check-icon">✓</span>三重耐性</div>
 </div>
 
-<!-- サブ Popover -->
+<!-- サブ Popover (以上 / 以下) -->
 <div class="cond-popover" id="subCondPopover">
   <div class="cond-option selected" data-value="-"><span class="check-icon">✓</span>-</div>
   <div class="cond-option" data-value="以上"><span class="check-icon">✓</span>以上</div>
@@ -939,7 +944,6 @@
     }
   });
   
-  // 「検索条件を変更する」ボタン押下時に最上部へスクロール
   changeCondBtn.addEventListener('click', () => {
     window.scrollTo({
       top: 0,
@@ -982,16 +986,13 @@
     });
   }
 
-  // 追加効果テキスト化のヘルパー（確率表示対応）
   function formatMoveEffects(mData) {
     if (!mData || !mData.effects || !Array.isArray(mData.effects) || mData.effects.length === 0) return '';
     
-    // 発生確率の取得 (技データ直下の chance プロパティを参照)
     const probVal = mData.chance;
     let probText = '';
     if (probVal !== undefined && probVal !== null) {
       const percent = probVal * 100;
-      // 整数ならそのまま、小数（.5など）がある場合は小数点第1位まで表示する
       const formattedPercent = Number.isInteger(percent) ? percent : percent.toFixed(1);
       probText = ` (${formattedPercent}%)`;
     }
@@ -1007,15 +1008,17 @@
     return `${textList.join(' / ')}${probText}`;
   }
 
-  const condPopover = document.getElementById('condPopover');
+  const posCondPopover = document.getElementById('posCondPopover');
+  const affinityCondPopover = document.getElementById('affinityCondPopover');
   const subCondPopover = document.getElementById('subCondPopover');
   
   let activeCondButton = null;
   let activeSubCondButton = null;
 
   function closeAllPopovers() {
-    condPopover.classList.remove('active');
-    subCondPopover.classList.remove('active');
+    if (posCondPopover) posCondPopover.classList.remove('active');
+    if (affinityCondPopover) affinityCondPopover.classList.remove('active');
+    if (subCondPopover) subCondPopover.classList.remove('active');
     activeCondButton = null;
     activeSubCondButton = null;
   }
@@ -1027,7 +1030,7 @@
     });
   }
 
-  function createInputRow(placeholderText, hasCondBtn = false, isRemovable = false, onRemove = null, listType = null) {
+  function createInputRow(placeholderText, condType = null, isRemovable = false, onRemove = null, listType = null) {
     const row = document.createElement('div');
     row.className = 'input-group-row';
 
@@ -1074,7 +1077,8 @@
 
     setupAutocomplete(input, sugList, listType);
 
-    if (hasCondBtn) {
+    // 条件ボタン生成（所有タイプ：possession / タイプ相性：affinity）
+    if (condType === 'possession') {
       const condBtn = document.createElement('button');
       condBtn.type = 'button';
       condBtn.className = 'cond-btn';
@@ -1082,32 +1086,60 @@
       condBtn.dataset.group = 'possession';
       condBtn.dataset.value = '一致';
 
-      const subCondBtn = document.createElement('button');
-      subCondBtn.type = 'button';
-      subCondBtn.className = 'sub-cond-btn';
-      subCondBtn.innerText = '-';
-      subCondBtn.dataset.value = '-';
-      subCondBtn.style.display = 'none';
-
       condBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (activeCondButton === condBtn && condPopover.classList.contains('active')) {
+        if (activeCondButton === condBtn && posCondPopover.classList.contains('active')) {
           closeAllPopovers();
           return;
         }
         closeAllPopovers();
 
         activeCondButton = condBtn;
-        
         const curVal = condBtn.dataset.value;
-        condPopover.querySelectorAll('.cond-option').forEach(opt => {
+        posCondPopover.querySelectorAll('.cond-option').forEach(opt => {
           opt.classList.toggle('selected', opt.dataset.value === curVal);
         });
 
         const rect = condBtn.getBoundingClientRect();
-        condPopover.style.top = `${rect.bottom + window.scrollY + 4}px`;
-        condPopover.style.left = `${rect.left + window.scrollX}px`;
-        condPopover.classList.add('active');
+        posCondPopover.style.top = `${rect.bottom + window.scrollY + 4}px`;
+        posCondPopover.style.left = `${rect.left + window.scrollX}px`;
+        posCondPopover.classList.add('active');
+      });
+
+      row.appendChild(condBtn);
+
+    } else if (condType === 'affinity') {
+      const condBtn = document.createElement('button');
+      condBtn.type = 'button';
+      condBtn.className = 'cond-btn';
+      condBtn.innerText = '等倍';
+      condBtn.dataset.group = 'affinity';
+      condBtn.dataset.value = '等倍';
+
+      const subCondBtn = document.createElement('button');
+      subCondBtn.type = 'button';
+      subCondBtn.className = 'sub-cond-btn';
+      subCondBtn.innerText = '-';
+      subCondBtn.dataset.value = '-';
+
+      condBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (activeCondButton === condBtn && affinityCondPopover.classList.contains('active')) {
+          closeAllPopovers();
+          return;
+        }
+        closeAllPopovers();
+
+        activeCondButton = condBtn;
+        const curVal = condBtn.dataset.value;
+        affinityCondPopover.querySelectorAll('.cond-option').forEach(opt => {
+          opt.classList.toggle('selected', opt.dataset.value === curVal);
+        });
+
+        const rect = condBtn.getBoundingClientRect();
+        affinityCondPopover.style.top = `${rect.bottom + window.scrollY + 4}px`;
+        affinityCondPopover.style.left = `${rect.left + window.scrollX}px`;
+        affinityCondPopover.classList.add('active');
       });
 
       subCondBtn.addEventListener('click', (e) => {
@@ -1119,8 +1151,6 @@
         closeAllPopovers();
 
         activeSubCondButton = subCondBtn;
-
-        // 現在のボタンの値を参照してチェックマーク（selected）を更新
         const curVal = subCondBtn.dataset.value || '-';
         subCondPopover.querySelectorAll('.cond-option').forEach(opt => {
           opt.classList.toggle('selected', opt.dataset.value === curVal);
@@ -1212,7 +1242,6 @@
       if (clearBtn) clearBtn.classList.add('visible');
     }
 
-    // ハイライト表示とスクロール追従の更新
     function updateHighlight() {
       const items = sugListEl.querySelectorAll('.adv-suggestion-item');
       items.forEach((item, index) => {
@@ -1233,9 +1262,7 @@
       }
     });
 
-    // キーボード操作 (矢印キー・Enter・Escape)
     inputEl.addEventListener('keydown', (e) => {
-      // IME変換中のEnterや矢印キー操作を無視する
       if (e.isComposing) return;
 
       if (!sugListEl.classList.contains('active')) return;
@@ -1266,26 +1293,23 @@
     });
   }
 
-  condPopover.querySelectorAll('.cond-option').forEach(option => {
-    option.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (!activeCondButton) return;
+  // 所有タイプ / タイプ相性用ポップオーバーオプションのクリックイベント設定
+  [posCondPopover, affinityCondPopover].forEach(popover => {
+    if (!popover) return;
+    popover.querySelectorAll('.cond-option').forEach(option => {
+      option.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!activeCondButton) return;
 
-      const group = option.dataset.group;
-      const value = option.dataset.value;
+        const group = option.dataset.group;
+        const value = option.dataset.value;
 
-      activeCondButton.innerText = value;
-      activeCondButton.dataset.group = group;
-      activeCondButton.dataset.value = value;
+        activeCondButton.innerText = value;
+        activeCondButton.dataset.group = group;
+        activeCondButton.dataset.value = value;
 
-      const subBtn = activeCondButton.nextElementSibling;
-      if (group === 'affinity') {
-        subBtn.style.display = 'inline-block';
-      } else {
-        subBtn.style.display = 'none';
-      }
-
-      closeAllPopovers();
+        closeAllPopovers();
+      });
     });
   });
 
@@ -1296,9 +1320,8 @@
 
       const value = option.dataset.value;
       activeSubCondButton.innerText = value;
-      activeSubCondButton.dataset.value = value; // ボタンのdataset値も更新
+      activeSubCondButton.dataset.value = value;
 
-      // 選択状態（チェックマーク）の切り替え
       subCondPopover.querySelectorAll('.cond-option').forEach(opt => {
         opt.classList.remove('selected');
       });
@@ -1309,7 +1332,7 @@
   });
 
   document.addEventListener('click', (e) => {
-    if (!condPopover.contains(e.target) && !subCondPopover.contains(e.target)) {
+    if (!posCondPopover.contains(e.target) && !affinityCondPopover.contains(e.target) && !subCondPopover.contains(e.target)) {
       closeAllPopovers();
     }
     if (!e.target.classList.contains('adv-input')) {
@@ -1317,12 +1340,12 @@
     }
   });
 
-  function setupDynamicSection(containerId, addBtnId, placeholder, hasCond = false, initialCount = 2, maxCount = 4, listType = null) {
+  function setupDynamicSection(containerId, addBtnId, placeholder, condType = null, initialCount = 2, maxCount = 4, listType = null) {
     const container = document.getElementById(containerId);
     const addBtn = document.getElementById(addBtnId);
 
     for (let i = 0; i < initialCount; i++) {
-      container.appendChild(createInputRow(placeholder, hasCond, false, null, listType));
+      container.appendChild(createInputRow(placeholder, condType, false, null, listType));
     }
 
     if (container.children.length >= maxCount) {
@@ -1331,7 +1354,7 @@
 
     addBtn.addEventListener('click', () => {
       if (container.children.length < maxCount) {
-        const newRow = createInputRow(placeholder, hasCond, true, () => {
+        const newRow = createInputRow(placeholder, condType, true, () => {
           if (container.children.length < maxCount) {
             addBtn.style.display = 'block';
           }
@@ -1401,10 +1424,11 @@
     }
     moveMasterList = Array.from(moveSet);
 
-    setupDynamicSection('typeInputsContainer', 'addTypeBtn', '', true, 2, 4, 'type');
-    setupDynamicSection('moveInputsContainer', 'addMoveBtn', '', false, 2, 4, 'move');
-    setupDynamicSection('move1TypeInputsContainer', 'addMove1TypeBtn', '', false, 2, 4, 'type');
-    setupDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', false, 2, 4, 'type');
+    setupDynamicSection('posTypeInputsContainer', 'addPosTypeBtn', '', 'possession', 2, 4, 'type');
+    setupDynamicSection('affinityInputsContainer', 'addAffinityBtn', '', 'affinity', 2, 4, 'type');
+    setupDynamicSection('moveInputsContainer', 'addMoveBtn', '', null, 2, 4, 'move');
+    setupDynamicSection('move1TypeInputsContainer', 'addMove1TypeBtn', '', null, 2, 4, 'type');
+    setupDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', null, 2, 4, 'type');
   });
 
   // 検索ボタンクリック時の処理
@@ -1416,7 +1440,6 @@
       return activeBtn ? activeBtn.dataset.value : 'yes';
     };
 
-    // 「有」になっているカテゴリのリストを取得
     const activeCategories = [];
     ['normal', 'mega', 'legendary', 'mythical', 'ub', 'paradox'].forEach(cat => {
       if (getToggleValue(cat) === 'yes') {
@@ -1432,21 +1455,31 @@
       return normalizeText(targetText).includes(normalizeText(queryText));
     };
 
-    // 各条件の入力値取得
-    const typeRows = Array.from(document.getElementById('typeInputsContainer').children);
-    const typeConds = typeRows.map(row => {
-      const rawVal = row.querySelector('input').value.trim();
-      const val = rawVal; // そのまま保持
+    // 1. 所有タイプ条件
+    const posTypeRows = Array.from(document.getElementById('posTypeInputsContainer').children);
+    const posTypeConds = posTypeRows.map(row => {
+      const val = row.querySelector('input').value.trim();
+      const condBtn = row.querySelector('.cond-btn');
+      return {
+        val,
+        cond: condBtn ? condBtn.dataset.value : '一致'
+      };
+    }).filter(c => c.val !== '');
+    const posTypeOrSearch = document.getElementById('posTypeOrSearch').checked;
+
+    // 2. タイプ相性条件
+    const affinityRows = Array.from(document.getElementById('affinityInputsContainer').children);
+    const affinityConds = affinityRows.map(row => {
+      const val = row.querySelector('input').value.trim();
       const condBtn = row.querySelector('.cond-btn');
       const subBtn = row.querySelector('.sub-cond-btn');
       return {
         val,
-        group: condBtn ? condBtn.dataset.group : 'possession',
-        cond: condBtn ? condBtn.dataset.value : '一致',
+        cond: condBtn ? condBtn.dataset.value : '二重弱点',
         subCond: subBtn ? subBtn.dataset.value : '-'
       };
     }).filter(c => c.val !== '');
-    const typeOrSearch = document.getElementById('typeOrSearch').checked;
+    const affinityOrSearch = document.getElementById('affinityOrSearch').checked;
 
     const moveRows = Array.from(document.getElementById('moveInputsContainer').children);
     const moveConds = moveRows.map(row => row.querySelector('input').value.trim()).filter(v => v !== '');
@@ -1463,7 +1496,6 @@
     const selectedEffects = Array.from(document.querySelectorAll('.effect-cb:checked')).map(cb => cb.value);
     const effectOrSearch = document.getElementById('effectOrSearch').checked;
 
-    // 技関連の条件が指定されているかどうかのフラグ
     const isMoveFilterActive = (moveConds.length > 0) || (move1TypeConds.length > 0) || (move2TypeConds.length > 0) || (selectedEffects.length > 0);
 
     const pokemonEntriesWithIndex = Object.entries(POKEMON_DATA).map(([key, pokemon], index) => ({
@@ -1475,11 +1507,8 @@
     const filteredEntries = pokemonEntriesWithIndex.filter(({ key, pokemon }) => {
       const categories = pokemon.category || [];
 
-      // 1. 未実装ポケモンの判定（未実装が「無」で、かつreleasedがfalseの場合は除外）
       if (!allowUnreleased && pokemon.released === false) return false;
 
-      // 2. 種類/実装の OR判定
-      // 「有」になっているカテゴリのいずれか1つでも保有しているかチェック
       const hasCategoryMatch = activeCategories.some(cat => categories.includes(cat));
       if (!hasCategoryMatch) return false;
 
@@ -1489,53 +1518,58 @@
 
       const sectionResults = [];
 
-      // 1. タイプ条件
-      if (typeConds.length > 0) {
-        const checkTypeCond = (c) => {
-          if (c.group === 'possession') {
-            // 比較処理で normalizeText を通すためひらがな入力でもヒットします
-            const hasType = pokeTypes.some(t => isTextMatch(t, c.val));
-            return c.cond === '一致' ? hasType : !hasType;
-          } else if (c.group === 'affinity') {
-            let mult = 1.0;
-            if (typeof TYPE_CHART !== 'undefined') {
-              // タイプ相性表の参照時も同様に判定
-              const targetTypeKey = Object.keys(TYPE_CHART).find(t => isTextMatch(t, c.val));
-              if (targetTypeKey && TYPE_CHART[targetTypeKey]) {
-                pokeTypes.forEach(pt => {
-                  const defTypeKey = Object.keys(TYPE_CHART[targetTypeKey]).find(dt => normalizeText(dt) === normalizeText(pt));
-                  if (defTypeKey && TYPE_CHART[targetTypeKey][defTypeKey] !== undefined) {
-                    mult *= TYPE_CHART[targetTypeKey][defTypeKey];
-                  }
-                });
-              }
-            }
-            let label = '等倍';
-            if (mult >= 2.5) label = '二重弱点';
-            else if (mult > 1.2) label = '弱点';
-            else if (mult < 0.25) label = '三重耐性';
-            else if (mult < 0.5) label = '二重耐性';
-            else if (mult < 0.8) label = '耐性';
-
-            if (c.subCond === '以上') {
-              const multMap = { '二重弱点': 2.56, '弱点': 1.6, '等倍': 1.0, '耐性': 0.625, '二重耐性': 0.39, '三重耐性': 0.24 };
-              return mult >= (multMap[c.cond] || 0);
-            } else if (c.subCond === '以下') {
-              const multMap = { '二重弱点': 2.56, '弱点': 1.6, '等倍': 1.0, '耐性': 0.625, '二重耐性': 0.39, '三重耐性': 0.24 };
-              return mult <= (multMap[c.cond] || 99);
-            }
-            return label === c.cond;
-          }
-          return true;
+      // 所有タイプ判定
+      if (posTypeConds.length > 0) {
+        const checkPosType = (c) => {
+          const hasType = pokeTypes.some(t => isTextMatch(t, c.val));
+          return c.cond === '一致' ? hasType : !hasType;
         };
-
-        const typeMatched = typeOrSearch 
-          ? typeConds.some(checkTypeCond) 
-          : typeConds.every(checkTypeCond);
-        sectionResults.push(typeMatched);
+        const posMatched = posTypeOrSearch 
+          ? posTypeConds.some(checkPosType) 
+          : posTypeConds.every(checkPosType);
+        sectionResults.push(posMatched);
       }
 
-      // 2. 習得技条件
+      // タイプ相性判定
+      if (affinityConds.length > 0) {
+        const checkAffinity = (c) => {
+          let mult = 1.0;
+          if (typeof TYPE_CHART !== 'undefined') {
+            const targetTypeKey = Object.keys(TYPE_CHART).find(t => isTextMatch(t, c.val));
+            if (targetTypeKey && TYPE_CHART[targetTypeKey]) {
+              pokeTypes.forEach(pt => {
+                const defTypeKey = Object.keys(TYPE_CHART[targetTypeKey]).find(dt => normalizeText(dt) === normalizeText(pt));
+                if (defTypeKey && TYPE_CHART[targetTypeKey][defTypeKey] !== undefined) {
+                  mult *= TYPE_CHART[targetTypeKey][defTypeKey];
+                }
+              });
+            }
+          }
+
+          let label = '等倍';
+          if (mult >= 2.5) label = '二重弱点';
+          else if (mult > 1.2) label = '弱点';
+          else if (mult < 0.25) label = '三重耐性';
+          else if (mult < 0.5) label = '二重耐性';
+          else if (mult < 0.8) label = '耐性';
+
+          if (c.subCond === '以上') {
+            const multMap = { '二重弱点': 2.56, '弱点': 1.6, '等倍': 1.0, '耐性': 0.625, '二重耐性': 0.39, '三重耐性': 0.24 };
+            return mult >= (multMap[c.cond] || 0);
+          } else if (c.subCond === '以下') {
+            const multMap = { '二重弱点': 2.56, '弱点': 1.6, '等倍': 1.0, '耐性': 0.625, '二重耐性': 0.39, '三重耐性': 0.24 };
+            return mult <= (multMap[c.cond] || 99);
+          }
+          return label === c.cond;
+        };
+
+        const affinityMatched = affinityOrSearch
+          ? affinityConds.some(checkAffinity)
+          : affinityConds.every(checkAffinity);
+        sectionResults.push(affinityMatched);
+      }
+
+      // 習得技条件
       if (moveConds.length > 0) {
         const allMoves = [
           ...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || []),
@@ -1546,7 +1580,7 @@
         sectionResults.push(moveMatched);
       }
 
-      // 3. 技1タイプ条件
+      // 技1タイプ条件
       if (move1TypeConds.length > 0) {
         const move1List = [...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || [])];
         const checkMove1Type = (mtCond) => {
@@ -1559,7 +1593,7 @@
         sectionResults.push(move1Matched);
       }
 
-      // 4. 技2タイプ条件
+      // 技2タイプ条件
       if (move2TypeConds.length > 0) {
         const move2List = [...(pokemon.move2 || []), ...(pokemon.LegacyMove2 || [])];
         const checkMove2Type = (mtCond) => {
@@ -1572,7 +1606,7 @@
         sectionResults.push(move2Matched);
       }
 
-      // 5. 技の追加効果条件
+      // 技の追加効果条件
       if (selectedEffects.length > 0) {
         const allMovesList = [
           ...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || []),
@@ -1606,10 +1640,9 @@
 
     const results = filteredEntries.map(item => [item.key, item.pokemon]);
     
-    // --- 検索条件テキストの生成 ---
+    // 検索条件テキストの生成
     const summaryTexts = [];
 
-    // 1. 種類 / 実装
     const activeCatLabels = [];
     const catMap = {
       normal: '一般', mega: 'メガシンカ', legendary: '伝説',
@@ -1622,49 +1655,40 @@
       summaryTexts.push(`${activeCatLabels.join(', ')} 有`);
     }
 
-    // 2. タイプ
-    if (typeConds.length > 0) {
-      const typeTexts = typeConds.map(c => {
-        let txt = `『${c.val}』`;
-        if (c.group === 'possession') {
-          txt += c.cond;
-        } else {
-          txt += ` ${c.cond}`;
-          if (c.subCond !== '-') txt += c.subCond;
-        }
-        return txt;
-      });
-      let typeSummary = typeTexts.join(', ');
-      if (selectedTypeCategory === 'single') typeSummary += '（単タイプ）';
-      if (selectedTypeCategory === 'dual') typeSummary += '（複合タイプ）';
-      if (typeOrSearch && typeConds.length > 1) typeSummary += ' [OR]';
-      summaryTexts.push(typeSummary);
+    if (posTypeConds.length > 0) {
+      let posTxt = posTypeConds.map(c => `『${c.val}』${c.cond}`).join(', ');
+      if (selectedTypeCategory === 'single') posTxt += '（単タイプ）';
+      if (selectedTypeCategory === 'dual') posTxt += '（複合タイプ）';
+      if (posTypeOrSearch && posTypeConds.length > 1) posTxt += ' [OR]';
+      summaryTexts.push(`所有タイプ ${posTxt}`);
     } else if (selectedTypeCategory !== 'all') {
       summaryTexts.push(selectedTypeCategory === 'single' ? '単タイプ' : '複合タイプ');
     }
 
-    // 3. 習得技
+    if (affinityConds.length > 0) {
+      let affTxt = affinityConds.map(c => `『${c.val}』 ${c.cond}${c.subCond !== '-' ? c.subCond : ''}`).join(', ');
+      if (affinityOrSearch && affinityConds.length > 1) affTxt += ' [OR]';
+      summaryTexts.push(`タイプ相性 ${affTxt}`);
+    }
+
     if (moveConds.length > 0) {
       let moveTxt = moveConds.map(m => `『${m}』`).join(', ');
       if (moveOrSearch && moveConds.length > 1) moveTxt += ' [OR]';
       summaryTexts.push(`習得技 ${moveTxt}`);
     }
 
-    // 4. 技1タイプ
     if (move1TypeConds.length > 0) {
       let m1Txt = move1TypeConds.map(t => `『${t}』`).join(', ');
       if (move1TypeOrSearch && move1TypeConds.length > 1) m1Txt += ' [OR]';
       summaryTexts.push(`技1タイプ ${m1Txt}`);
     }
 
-    // 5. 技2タイプ
     if (move2TypeConds.length > 0) {
       let m2Txt = move2TypeConds.map(t => `『${t}』`).join(', ');
       if (move2TypeOrSearch && move2TypeConds.length > 1) m2Txt += ' [OR]';
       summaryTexts.push(`技2タイプ ${m2Txt}`);
     }
 
-    // 6. 追加効果
     if (selectedEffects.length > 0) {
       const effectMap = {
         self_atk_up: '自身の攻撃Up', self_atk_down: '自身の攻撃Down',
@@ -1676,10 +1700,8 @@
       summaryTexts.push(`技の追加効果 ${effTxt}`);
     }
 
-    // 7. 全条件
     summaryTexts.push(`全条件 『${globalMatchMode === 'exact' ? '完全一致' : '部分一致'}』`);
 
-    // 描画関数へ渡す
     renderResults(results, isMoveFilterActive, {
       moveConds, move1TypeConds, move2TypeConds, selectedEffects
     }, summaryTexts);
@@ -1690,7 +1712,6 @@
     const resultsList = document.getElementById('resultsList');
     const resultsCountBadge = document.getElementById('resultsCountBadge');
     
-    // ▼ 条件サマリーボックス要素の取得 ▼
     const condBox = document.getElementById('appliedConditionsBox');
     const condList = document.getElementById('appliedConditionsList');
     
@@ -1699,7 +1720,6 @@
 
     resultsCountBadge.innerText = `${results.length}件該当`;
 
-    // ▼ 設定条件のテキスト描画処理 ▼
     if (summaryTexts.length > 0 && condBox && condList) {
       condList.innerHTML = '';
       summaryTexts.forEach(txt => {
@@ -1721,7 +1741,6 @@
         const block = document.createElement('div');
         block.className = 'result-block';
 
-        // --- 1行目: 基本情報 (No. / ポケモン名 / タイプ) ---
         const baseRow = document.createElement('div');
         baseRow.className = 'result-pokemon-row';
 
@@ -1742,12 +1761,10 @@
         baseRow.appendChild(typeBadge);
         block.appendChild(baseRow);
 
-        // --- 2行目以降: 技条件設定時のみ該当する技を表示 ---
         if (isMoveFilterActive) {
           const move1List = Array.from(new Set([...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || [])]));
           const move2List = Array.from(new Set([...(pokemon.move2 || []), ...(pokemon.LegacyMove2 || [])]));
 
-          // 技1（ノーマルアタック）のうち条件に合致するものを抽出
           const matchedMove1 = move1List.filter(mName => {
             const mData = getMoveData(mName);
             if (!mData) return false;
@@ -1759,7 +1776,6 @@
             return matchName || matchType1 || matchEffect;
           });
 
-          // 技2（スペシャルアタック）のうち条件に合致するものを抽出
           const matchedMove2 = move2List.filter(mName => {
             const mData = getMoveData(mName);
             if (!mData) return false;
@@ -1771,10 +1787,8 @@
             return matchName || matchType2 || matchEffect;
           });
 
-          // 重複を除去して順序通りに表示
           const matchedMoves = Array.from(new Set([...matchedMove1, ...matchedMove2]));
 
-          // 該当する技を「技名 | 技タイプ | 追加効果」のフォーマットで1行ずつ表示
           matchedMoves.forEach(mName => {
             const mData = getMoveData(mName);
             const moveRow = document.createElement('div');
@@ -1802,13 +1816,11 @@
       });
     }
 
-    // 検索結果が0件の場合でもスクロールが実行されます
     resultsSection.scrollIntoView({ behavior: 'smooth' });
   }
 
-// 一括クリア処理の関数
+  // 一括クリア処理の関数
   function clearAllConditions() {
-    // 1. 種類 / 実装 トグルを初期値にリセット（未実装のみ「無」、その他は「有」）
     document.querySelectorAll('.toggle-group').forEach(group => {
       const cat = group.dataset.category;
       const defaultVal = (cat === 'unreleased') ? 'no' : 'yes';
@@ -1822,31 +1834,26 @@
       });
     });
 
-    // 2. 動的入力欄の初期リセット処理
-    // （以下変更なし）
-
-    // 2. 動的入力欄の初期リセット処理
-    const resetDynamicSection = (containerId, addBtnId, placeholder, hasCond, maxCount, listType) => {
+    const resetDynamicSection = (containerId, addBtnId, placeholder, condType, maxCount, listType) => {
       const container = document.getElementById(containerId);
       const addBtn = document.getElementById(addBtnId);
       container.innerHTML = '';
       for (let i = 0; i < 2; i++) {
-        container.appendChild(createInputRow(placeholder, hasCond, false, null, listType));
+        container.appendChild(createInputRow(placeholder, condType, false, null, listType));
       }
       if (addBtn) addBtn.style.display = 'block';
     };
 
-    resetDynamicSection('typeInputsContainer', 'addTypeBtn', '', true, 4, 'type');
-    resetDynamicSection('moveInputsContainer', 'addMoveBtn', '', false, 4, 'move');
-    resetDynamicSection('move1TypeInputsContainer', 'addMove1TypeBtn', '', false, 4, 'type');
-    resetDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', false, 4, 'type');
+    resetDynamicSection('posTypeInputsContainer', 'addPosTypeBtn', '', 'possession', 4, 'type');
+    resetDynamicSection('affinityInputsContainer', 'addAffinityBtn', '', 'affinity', 4, 'type');
+    resetDynamicSection('moveInputsContainer', 'addMoveBtn', '', null, 4, 'move');
+    resetDynamicSection('move1TypeInputsContainer', 'addMove1TypeBtn', '', null, 4, 'type');
+    resetDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', null, 4, 'type');
 
-    // 3. 全てのチェックボックス（OR検索、追加効果）を解除
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
       cb.checked = false;
     });
 
-    // 4. タイプカテゴリのピル選択を「すべて」にリセット
     document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
     const allPillBtn = document.getElementById('typeCategoryAll');
     if (allPillBtn) {
@@ -1854,7 +1861,6 @@
       selectedTypeCategory = 'all';
     }
 
-    // 5. 全条件（部分一致/完全一致）を「部分一致」にリセット
     globalMatchButtons.forEach(btn => {
       if (btn.dataset.value === 'partial') {
         btn.classList.add('active');
@@ -1863,17 +1869,14 @@
       }
     });
 
-    // 6. 検索結果エリアを非表示にし、結果をリセット
     const resultsSection = document.getElementById('resultsSection');
     const resultsList = document.getElementById('resultsList');
     if (resultsSection) resultsSection.style.display = 'none';
     if (resultsList) resultsList.innerHTML = '';
 
-    // ポップオーバーが開いていれば閉じる
     closeAllPopovers();
   }
 
-  // 一括クリアボタンのクリックイベント登録
   document.getElementById('clearAllBtn').addEventListener('click', clearAllConditions);
 </script>
 
