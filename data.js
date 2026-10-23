@@ -12661,7 +12661,7 @@ const POKEMON_DATA = {
         "move1": ["けたぐり", "メタルクロー", "きんぞくおん", "バークアウト"],
         "LegacyMove1": [],
         "move2": ["きあいだま", "シザークロス", "アイアンヘッド", "あくのはどう", "イカサマ"],
-        "LegacyMove2": [],
+        "LegacyMove2": ["ドゲザン"],
         "released": true,
         "category": ["normal"]
     },

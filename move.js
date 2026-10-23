@@ -1221,6 +1221,9 @@ const MOVES = {
             type: "あく", pwr: 50, eng: 35,
             effects: [{ target: "self",     stat: "atk", stage:  1}],
             chance: 0.125 },
+        "ドゲザン": {
+            nameEn: "Kowtow Cleave",
+            type: "あく", pwr: 75, eng: 0 },
         "ブロッキング": {
             nameEn: "Obstruct",
             type: "あく", pwr: 15, eng: 40,
