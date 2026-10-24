@@ -492,10 +492,50 @@
 
     .result-name-badge {
       flex: 1.5;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .result-name-badge:hover {
+      background-color: #f1f5f9;
+      border-color: #3498db;
     }
 
     .result-type-badge {
       flex: 1.5;
+    }
+
+    /* ポケモン名クリック時の技一覧展開エリア */
+    .pokemon-moves-detail {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pokemon-moves-sub-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .pokemon-moves-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pokemon-move-chip {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
     }
 
     .result-move-row {
@@ -1918,6 +1958,60 @@
         const nameBadge = document.createElement('div');
         nameBadge.className = 'result-item-badge result-name-badge';
         nameBadge.innerText = pokemon.name;
+        nameBadge.title = 'クリックして技を表示/非表示';
+
+        // ポケモン名クリック時の技リスト開閉（トグル）機能
+        let movesContainer = null;
+        nameBadge.addEventListener('click', () => {
+          if (movesContainer) {
+            movesContainer.remove();
+            movesContainer = null;
+            return;
+          }
+
+          movesContainer = document.createElement('div');
+          movesContainer.className = 'pokemon-moves-detail';
+
+          const move1List = [...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || [])];
+          const move2List = [...(pokemon.move2 || []), ...(pokemon.LegacyMove2 || [])];
+
+          if (move1List.length > 0) {
+            const t1 = document.createElement('div');
+            t1.className = 'pokemon-moves-sub-title';
+            t1.innerText = '技1';
+            movesContainer.appendChild(t1);
+
+            const grid1 = document.createElement('div');
+            grid1.className = 'pokemon-moves-grid';
+            move1List.forEach(m => {
+              const chip = document.createElement('span');
+              chip.className = 'pokemon-move-chip';
+              chip.innerText = m;
+              grid1.appendChild(chip);
+            });
+            movesContainer.appendChild(grid1);
+          }
+
+          if (move2List.length > 0) {
+            const t2 = document.createElement('div');
+            t2.className = 'pokemon-moves-sub-title';
+            t2.style.marginTop = '4px';
+            t2.innerText = '技2';
+            movesContainer.appendChild(t2);
+
+            const grid2 = document.createElement('div');
+            grid2.className = 'pokemon-moves-grid';
+            move2List.forEach(m => {
+              const chip = document.createElement('span');
+              chip.className = 'pokemon-move-chip';
+              chip.innerText = m;
+              grid2.appendChild(chip);
+            });
+            movesContainer.appendChild(grid2);
+          }
+
+          block.appendChild(movesContainer);
+        });
 
         const typeBadge = document.createElement('div');
         typeBadge.className = 'result-item-badge result-type-badge';
@@ -1943,15 +2037,15 @@
 
           const atkBadge = document.createElement('div');
           atkBadge.className = 'result-item-badge result-stat-badge';
-          atkBadge.innerText = `攻撃 : ${ceilAtk}`;
+          atkBadge.innerText = `A : ${ceilAtk}`;
 
           const defBadge = document.createElement('div');
           defBadge.className = 'result-item-badge result-stat-badge';
-          defBadge.innerText = `防御 : ${ceilDef}`;
+          defBadge.innerText = `B : ${ceilDef}`;
 
           const hpBadge = document.createElement('div');
           hpBadge.className = 'result-item-badge result-stat-badge';
-          hpBadge.innerText = `HP : ${statData.hp}`;
+          hpBadge.innerText = `H : ${statData.hp}`;
 
           scpRow.appendChild(scpBadge);
           scpRow.appendChild(atkBadge);
