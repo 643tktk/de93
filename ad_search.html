@@ -233,6 +233,7 @@
       border: 1px solid #cbd5e1;
       background: #f1f5f9;
       cursor: pointer;
+      color: #334155;
     }
     .pill-btn.active {
       background: #2c3e50;
@@ -476,16 +477,25 @@
     }
 
     .result-dex-badge {
-      width: 100px;
+      width: 90px;
       flex-shrink: 0;
     }
 
-    .result-name-badge {
+    .result-scp-badge {
       flex: 1;
     }
 
-    .result-type-badge {
+    .result-stat-badge {
       flex: 1;
+      font-size: 12px;
+    }
+
+    .result-name-badge {
+      flex: 1.5;
+    }
+
+    .result-type-badge {
+      flex: 1.5;
     }
 
     .result-move-row {
@@ -625,12 +635,19 @@
 
       .result-dex-badge {
         width: auto;
-        min-width: 70px;
+        min-width: 60px;
       }
 
       .result-name-badge,
       .result-type-badge {
-        flex: 1 1 40%;
+        flex: 1 1 35%;
+      }
+
+      .result-scp-badge,
+      .result-stat-badge {
+        flex: 1 1 20%;
+        padding: 4px 6px;
+        font-size: 11px;
       }
 
       .result-move-row {
@@ -772,6 +789,32 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CP制限（単一選択） -->
+    <div>
+      <div class="section-title">・ CP制限</div>
+      <div class="pill-selector" style="margin-top: 6px;">
+        <button type="button" class="pill-btn cp-limit-btn" data-value="SL">SL</button>
+        <button type="button" class="pill-btn cp-limit-btn" data-value="HL">HL</button>
+        <button type="button" class="pill-btn cp-limit-btn" data-value="ML">ML</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SCP指定 -->
+    <div>
+      <div class="section-title">・ SCP指定</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 13px;">
+        <span style="font-weight: 600; color: #334155;">SCP</span>
+        <div class="input-wrapper-adv" style="max-width: 140px;">
+          <input type="number" class="adv-input" placeholder="" id="scpInput" style="padding-right: 12px;">
+        </div>
+        <span style="font-weight: 600; color: #334155;">以上</span>
       </div>
     </div>
 
@@ -951,6 +994,17 @@
     });
   });
 
+  // CP制限ボタンのUI切り替え（単一選択：クリックで選択、再クリックで未選択）
+  document.querySelectorAll('.cp-limit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isActive = btn.classList.contains('active');
+      document.querySelectorAll('.cp-limit-btn').forEach(b => b.classList.remove('active'));
+      if (!isActive) {
+        btn.classList.add('active');
+      }
+    });
+  });
+
   function hiraganaToKatakana(str) {
     return str.replace(/[\u3041-\u3096]/g, (match) => {
       return String.fromCharCode(match.charCodeAt(0) + 0x60);
@@ -963,6 +1017,95 @@
     s = s.replace(/[xｘXＸ]/g, 'X').replace(/[yｙYＹ]/g, 'Y').replace(/[zｚZＺ]/g, 'Z').toUpperCase();
     s = hiraganaToKatakana(s);
     return s;
+  }
+
+  // --- CPM および CP / SCP 計算ロジック ---
+  function toFloat32(val) {
+    return Math.fround(val);
+  }
+
+  function getCPMVal(level) {
+    if (Number.isInteger(level)) {
+      if (typeof BASE_CPM_32 !== 'undefined' && BASE_CPM_32[level] !== undefined) {
+        return toFloat32(BASE_CPM_32[level]);
+      }
+      if (typeof CPM_TABLE !== 'undefined' && CPM_TABLE[level] !== undefined) {
+        return toFloat32(CPM_TABLE[level]);
+      }
+      return 0.7903;
+    }
+
+    const prevLevel = Math.floor(level);
+    const nextLevel = Math.ceil(level);
+    let cpmPrev32 = null;
+    let cpmNext32 = null;
+
+    if (typeof BASE_CPM_32 !== 'undefined') {
+      if (BASE_CPM_32[prevLevel] !== undefined) cpmPrev32 = toFloat32(BASE_CPM_32[prevLevel]);
+      if (BASE_CPM_32[nextLevel] !== undefined) cpmNext32 = toFloat32(BASE_CPM_32[nextLevel]);
+    }
+
+    if (cpmPrev32 === null && typeof CPM_TABLE !== 'undefined' && CPM_TABLE[prevLevel] !== undefined) {
+      cpmPrev32 = toFloat32(CPM_TABLE[prevLevel]);
+    }
+    if (cpmNext32 === null && typeof CPM_TABLE !== 'undefined' && CPM_TABLE[nextLevel] !== undefined) {
+      cpmNext32 = toFloat32(CPM_TABLE[nextLevel]);
+    }
+
+    if (cpmPrev32 !== null && cpmNext32 !== null) {
+      return Math.sqrt((Math.pow(cpmPrev32, 2) + Math.pow(cpmNext32, 2)) / 2);
+    }
+    return 0.7903;
+  }
+
+  // CP計算（HP含め端数処理せず、最終結果のみ小数点以下切り捨て）
+  function calcCP(baseAtk, baseDef, baseHp, ivAtk, ivDef, ivHp, cpm) {
+    const rawAtk = (baseAtk + ivAtk) * cpm;
+    const rawDef = (baseDef + ivDef) * cpm;
+    const rawHp = (baseHp + ivHp) * cpm;
+    const cp = Math.floor((rawAtk * Math.sqrt(rawDef) * Math.sqrt(rawHp)) / 10);
+    return Math.max(10, cp);
+  }
+
+  // SCP計算（HPのみ小数点以下切り捨て、最終SCPも小数点以下切り捨て）
+  function calcSCP(baseAtk, baseDef, baseHp, ivAtk, ivDef, ivHp, cpm) {
+    const atk = (baseAtk + ivAtk) * cpm;
+    const def = (baseDef + ivDef) * cpm;
+    const hp = Math.max(10, Math.floor((baseHp + ivHp) * cpm));
+    return Math.floor(Math.pow(atk * def * hp, 2 / 3) / 10);
+  }
+
+  // 全個体値（0〜15）の組み合わせで最大SCPを探索
+  function getMaxSCPDataForPokemon(pokemon, maxCp) {
+    const base = pokemon.stats;
+    if (!base) return { scp: 0, atk: 0, def: 0, hp: 0 };
+
+    let maxScpFound = 0;
+    let bestStatData = { scp: 0, atk: 0, def: 0, hp: 0 };
+
+    for (let lvl = 1.0; lvl <= 51.0; lvl += 0.5) {
+      const cpm = getCPMVal(lvl);
+      if (!cpm) continue;
+
+      for (let ivAtk = 0; ivAtk <= 15; ivAtk++) {
+        for (let ivDef = 0; ivDef <= 15; ivDef++) {
+          for (let ivHp = 0; ivHp <= 15; ivHp++) {
+            const cp = calcCP(base.atk, base.def, base.hp, ivAtk, ivDef, ivHp, cpm);
+            if (maxCp === null || cp <= maxCp) {
+              const scp = calcSCP(base.atk, base.def, base.hp, ivAtk, ivDef, ivHp, cpm);
+              if (scp > maxScpFound) {
+                maxScpFound = scp;
+                const curAtk = (base.atk + ivAtk) * cpm;
+                const curDef = (base.def + ivDef) * cpm;
+                const curHp = Math.max(10, Math.floor((base.hp + ivHp) * cpm));
+                bestStatData = { scp, atk: curAtk, def: curDef, hp: curHp };
+              }
+            }
+          }
+        }
+      }
+    }
+    return bestStatData;
   }
 
   function getMoveData(moveName) {
@@ -1077,7 +1220,6 @@
 
     setupAutocomplete(input, sugList, listType);
 
-    // 条件ボタン生成（所有タイプ：possession / タイプ相性：affinity）
     if (condType === 'possession') {
       const condBtn = document.createElement('button');
       condBtn.type = 'button';
@@ -1293,7 +1435,6 @@
     });
   }
 
-  // 所有タイプ / タイプ相性用ポップオーバーオプションのクリックイベント設定
   [posCondPopover, affinityCondPopover].forEach(popover => {
     if (!popover) return;
     popover.querySelectorAll('.cond-option').forEach(option => {
@@ -1388,7 +1529,7 @@
   let selectedTypeCategory = 'all';
   ['typeCategoryAll', 'typeCategorySingle', 'typeCategoryDual'].forEach(id => {
     document.getElementById(id).addEventListener('click', (e) => {
-      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.pill-btn:not(.cp-limit-btn)').forEach(btn => btn.classList.remove('active'));
       e.target.classList.add('active');
       selectedTypeCategory = e.target.dataset.value;
     });
@@ -1431,7 +1572,6 @@
     setupDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', null, 2, 4, 'type');
   });
 
-  // 検索ボタンクリック時の処理
   document.getElementById('execSearchBtn').addEventListener('click', () => {
     const getToggleValue = (cat) => {
       const group = document.querySelector(`.toggle-group[data-category="${cat}"]`);
@@ -1448,6 +1588,15 @@
     });
     const allowUnreleased = getToggleValue('unreleased') === 'yes';
 
+    // CP制限 & SCP指定の値取得
+    const activeCpLimitBtn = document.querySelector('.cp-limit-btn.active');
+    const cpLimitType = activeCpLimitBtn ? activeCpLimitBtn.dataset.value : null; // 'SL', 'HL', 'ML'
+    const maxCp = cpLimitType === 'SL' ? 1500 : cpLimitType === 'HL' ? 2500 : null;
+
+    const scpInputVal = document.getElementById('scpInput').value.trim();
+    const minScp = scpInputVal !== '' ? parseFloat(scpInputVal) : null;
+    const isScpSpecified = minScp !== null || cpLimitType !== null; // SCP/CP制限指定フラグ
+
     const activeMatchBtn = document.querySelector('#globalMatchGroup .match-btn.active');
     const globalMatchMode = activeMatchBtn ? activeMatchBtn.dataset.value : 'partial';
 
@@ -1455,7 +1604,6 @@
       return normalizeText(targetText).includes(normalizeText(queryText));
     };
 
-    // 1. 所有タイプ条件
     const posTypeRows = Array.from(document.getElementById('posTypeInputsContainer').children);
     const posTypeConds = posTypeRows.map(row => {
       const val = row.querySelector('input').value.trim();
@@ -1467,7 +1615,6 @@
     }).filter(c => c.val !== '');
     const posTypeOrSearch = document.getElementById('posTypeOrSearch').checked;
 
-    // 2. タイプ相性条件
     const affinityRows = Array.from(document.getElementById('affinityInputsContainer').children);
     const affinityConds = affinityRows.map(row => {
       const val = row.querySelector('input').value.trim();
@@ -1516,9 +1663,19 @@
       if (selectedTypeCategory === 'single' && pokeTypes.length !== 1) return false;
       if (selectedTypeCategory === 'dual' && pokeTypes.length !== 2) return false;
 
+      // CP制限 & SCP指定のフィルタリング判定
+      if (cpLimitType !== null || minScp !== null) {
+        const statData = getMaxSCPDataForPokemon(pokemon, maxCp);
+        if (cpLimitType !== null && statData.scp === 0) {
+          return false;
+        }
+        if (minScp !== null && statData.scp < minScp) {
+          return false;
+        }
+      }
+
       const sectionResults = [];
 
-      // 所有タイプ判定
       if (posTypeConds.length > 0) {
         const checkPosType = (c) => {
           const hasType = pokeTypes.some(t => isTextMatch(t, c.val));
@@ -1530,7 +1687,6 @@
         sectionResults.push(posMatched);
       }
 
-      // タイプ相性判定
       if (affinityConds.length > 0) {
         const checkAffinity = (c) => {
           let mult = 1.0;
@@ -1569,7 +1725,6 @@
         sectionResults.push(affinityMatched);
       }
 
-      // 習得技条件
       if (moveConds.length > 0) {
         const allMoves = [
           ...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || []),
@@ -1580,7 +1735,6 @@
         sectionResults.push(moveMatched);
       }
 
-      // 技1タイプ条件
       if (move1TypeConds.length > 0) {
         const move1List = [...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || [])];
         const checkMove1Type = (mtCond) => {
@@ -1593,7 +1747,6 @@
         sectionResults.push(move1Matched);
       }
 
-      // 技2タイプ条件
       if (move2TypeConds.length > 0) {
         const move2List = [...(pokemon.move2 || []), ...(pokemon.LegacyMove2 || [])];
         const checkMove2Type = (mtCond) => {
@@ -1606,7 +1759,6 @@
         sectionResults.push(move2Matched);
       }
 
-      // 技の追加効果条件
       if (selectedEffects.length > 0) {
         const allMovesList = [
           ...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || []),
@@ -1638,9 +1790,12 @@
       return a.index - b.index;
     });
 
-    const results = filteredEntries.map(item => [item.key, item.pokemon]);
+    // 各ポケモンの最大SCP・ステータスデータ（攻撃/防御/HP）も保持して結果オブジェクトを作成
+    const results = filteredEntries.map(item => {
+      const statData = getMaxSCPDataForPokemon(item.pokemon, maxCp);
+      return { key: item.key, pokemon: item.pokemon, statData };
+    });
     
-    // 検索条件テキストの生成
     const summaryTexts = [];
 
     const activeCatLabels = [];
@@ -1653,6 +1808,13 @@
     });
     if (activeCatLabels.length > 0) {
       summaryTexts.push(`${activeCatLabels.join(', ')} 有`);
+    }
+
+    if (cpLimitType) {
+      summaryTexts.push(`CP制限: ${cpLimitType} (${maxCp ? maxCp + '以下' : '無制限'})`);
+    }
+    if (minScp !== null) {
+      summaryTexts.push(`SCP指定: ${minScp}以上`);
     }
 
     if (posTypeConds.length > 0) {
@@ -1704,10 +1866,10 @@
 
     renderResults(results, isMoveFilterActive, {
       moveConds, move1TypeConds, move2TypeConds, selectedEffects
-    }, summaryTexts);
+    }, summaryTexts, isScpSpecified);
   });
 
-  function renderResults(results, isMoveFilterActive, activeFilters, summaryTexts = []) {
+  function renderResults(results, isMoveFilterActive, activeFilters, summaryTexts = [], isScpSpecified = false) {
     const resultsSection = document.getElementById('resultsSection');
     const resultsList = document.getElementById('resultsList');
     const resultsCountBadge = document.getElementById('resultsCountBadge');
@@ -1737,10 +1899,15 @@
     } else {
       const isTextMatch = (targetText, queryText) => normalizeText(targetText).includes(normalizeText(queryText));
 
-      results.forEach(([key, pokemon]) => {
+      results.forEach(item => {
+        const key = item.key;
+        const pokemon = item.pokemon;
+        const statData = item.statData;
+
         const block = document.createElement('div');
         block.className = 'result-block';
 
+        // 1段目: 図鑑番号、ポケモン名、タイプ
         const baseRow = document.createElement('div');
         baseRow.className = 'result-pokemon-row';
 
@@ -1760,6 +1927,38 @@
         baseRow.appendChild(nameBadge);
         baseRow.appendChild(typeBadge);
         block.appendChild(baseRow);
+
+        // SCP/CP指定時：2段目に SCP / 攻撃 / 防御 / HP を表示
+        if (isScpSpecified) {
+          const scpRow = document.createElement('div');
+          scpRow.className = 'result-pokemon-row';
+
+          const scpBadge = document.createElement('div');
+          scpBadge.className = 'result-item-badge result-scp-badge';
+          scpBadge.innerText = `SCP : ${statData.scp}`;
+
+          // 小数点第三位を切り上げて表示（小数点第二位まで）
+          const ceilAtk = (Math.ceil(statData.atk * 100) / 100).toFixed(2);
+          const ceilDef = (Math.ceil(statData.def * 100) / 100).toFixed(2);
+
+          const atkBadge = document.createElement('div');
+          atkBadge.className = 'result-item-badge result-stat-badge';
+          atkBadge.innerText = `攻撃 : ${ceilAtk}`;
+
+          const defBadge = document.createElement('div');
+          defBadge.className = 'result-item-badge result-stat-badge';
+          defBadge.innerText = `防御 : ${ceilDef}`;
+
+          const hpBadge = document.createElement('div');
+          hpBadge.className = 'result-item-badge result-stat-badge';
+          hpBadge.innerText = `HP : ${statData.hp}`;
+
+          scpRow.appendChild(scpBadge);
+          scpRow.appendChild(atkBadge);
+          scpRow.appendChild(defBadge);
+          scpRow.appendChild(hpBadge);
+          block.appendChild(scpRow);
+        }
 
         if (isMoveFilterActive) {
           const move1List = Array.from(new Set([...(pokemon.move1 || []), ...(pokemon.LegacyMove1 || [])]));
@@ -1819,7 +2018,6 @@
     resultsSection.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // 一括クリア処理の関数
   function clearAllConditions() {
     document.querySelectorAll('.toggle-group').forEach(group => {
       const cat = group.dataset.category;
@@ -1833,6 +2031,13 @@
         }
       });
     });
+
+    document.querySelectorAll('.cp-limit-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    const scpInput = document.getElementById('scpInput');
+    if (scpInput) scpInput.value = '';
 
     const resetDynamicSection = (containerId, addBtnId, placeholder, condType, maxCount, listType) => {
       const container = document.getElementById(containerId);
@@ -1854,7 +2059,7 @@
       cb.checked = false;
     });
 
-    document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.pill-btn:not(.cp-limit-btn)').forEach(btn => btn.classList.remove('active'));
     const allPillBtn = document.getElementById('typeCategoryAll');
     if (allPillBtn) {
       allPillBtn.classList.add('active');
