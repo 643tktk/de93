@@ -1131,7 +1131,7 @@ const MOVES = {
             type: "ゴースト", pwr: 70, eng: 45 },
         "ナイトヘッド+": {
             nameEn: "Night Shade",
-            type: "ゴースト", pwr: 55, eng: 40 },
+            type: "ゴースト", pwr: 55, eng: 45 },
         "ふんどのこぶし": {
             nameEn: "Rage Fist",
             type: "ゴースト", pwr: 55, eng: 40,
