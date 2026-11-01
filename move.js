@@ -724,7 +724,7 @@ const MOVES = {
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 0.333 },
         "でんじほう+": {
-            nameEn: "Zap Cannon",
+            nameEn: "Zap Cannon+",
             type: "でんき", pwr: 70, eng: 45,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 1.0 },
@@ -737,7 +737,7 @@ const MOVES = {
             nameEn: "Discharge",
             type: "でんき", pwr: 55, eng: 40 },
         "ほうでん+": {
-            nameEn: "Discharge",
+            nameEn: "Discharge+",
             type: "でんき", pwr: 50, eng: 35 },
         "ボルテッカー": {
             nameEn: "Volt Tackle",
@@ -745,7 +745,7 @@ const MOVES = {
             effects: [{ target: "self",     stat: "def", stage: -1}],
             chance: 1.0 },
         "ボルテッカー+": {
-            nameEn: "Volt Tackle",
+            nameEn: "Volt Tackle+",
             type: "でんき", pwr: 65, eng: 35,
             effects: [{ target: "self",     stat: "def", stage: -1}],
             chance: 1.0 },
@@ -862,7 +862,7 @@ const MOVES = {
             nameEn: "Dynamic Punch",
             type: "かくとう", pwr: 90, eng: 45 },
         "ばくれつパンチ+": {
-            nameEn: "Dynamic Punch",
+            nameEn: "Dynamic Punch+",
             type: "かくとう", pwr: 130, eng: 80 },
         "はどうだん": {
             nameEn: "Aura Sphere",
@@ -1096,7 +1096,7 @@ const MOVES = {
                       { target: "self",     stat: "def", stage:  1}],
             chance: 0.1 },
         "あやしいかぜ+": {
-            nameEn: "Ominouos Wind",
+            nameEn: "Ominouos Wind+",
             type: "ゴースト", pwr: 50, eng: 40,
             effects: [{ target: "self",     stat: "atk", stage:  1},
                       { target: "self",     stat: "def", stage:  1}],
@@ -1130,7 +1130,7 @@ const MOVES = {
             nameEn: "Night Shade",
             type: "ゴースト", pwr: 70, eng: 45 },
         "ナイトヘッド+": {
-            nameEn: "Night Shade",
+            nameEn: "Night Shade+",
             type: "ゴースト", pwr: 55, eng: 45 },
         "ふんどのこぶし": {
             nameEn: "Rage Fist",
