@@ -1223,7 +1223,7 @@ const MOVES = {
             chance: 0.125 },
         "ドゲザン": {
             nameEn: "Kowtow Cleave",
-            type: "あく", pwr: 75, eng: 0 },
+            type: "あく", pwr: 75, eng: 40 },
         "ブロッキング": {
             nameEn: "Obstruct",
             type: "あく", pwr: 15, eng: 40,
@@ -1302,5 +1302,10 @@ const MOVES = {
             type: "フェアリー", pwr: 90, eng: 50,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 0.1 },
+        "ムーンフォース+": {
+            nameEn: "Moonblast",
+            type: "フェアリー", pwr: 80, eng: 45,
+            effects: [{ target: "opponent", stat: "atk", stage: -1}],
+            chance: 0.1 }
     }
 };
