@@ -11917,9 +11917,9 @@ const POKEMON_DATA = {
         "types": ["ノーマル"],
         "stats": { "atk": 186, "def": 153, "hp": 242 },
         "move1": ["たいあたり", "とっしん"],
-        "LegacyMove1": [],
+        "LegacyMove1": ["どろかけ"],
         "move2": ["のしかかり", "あなをほる", "くさわけ"],
-        "LegacyMove2": ["どろかけ"],
+        "LegacyMove2": [],
         "released": true,
         "category": ["normal"]
     },
@@ -11927,9 +11927,9 @@ const POKEMON_DATA = {
         "types": ["ノーマル"],
         "stats": { "atk": 169, "def": 162, "hp": 251 },
         "move1": ["たいあたり", "とっしん"],
-        "LegacyMove1": [],
+        "LegacyMove1": ["どろかけ"],
         "move2": ["のしかかり", "あなをほる", "くさわけ"],
-        "LegacyMove2": ["どろかけ"],
+        "LegacyMove2": [],
         "released": true,
         "category": ["normal"]
     },
