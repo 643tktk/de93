@@ -864,7 +864,7 @@
     <div>
       <div class="section-title">・ 所有タイプ</div>
       <div id="posTypeInputsContainer"></div>
-      <button type="button" class="add-btn" id="addPosTypeBtn">項目追加 (最大4つまで)</button>
+      <button type="button" class="add-btn" id="addPosTypeBtn">項目追加 (最大6つまで)</button>
 
       <div class="checkbox-group" style="margin-top: 8px;">
         <label class="checkbox-label"><input type="checkbox" id="posTypeOrSearch"> OR検索</label>
@@ -883,7 +883,7 @@
     <div>
       <div class="section-title">・ タイプ相性</div>
       <div id="affinityInputsContainer"></div>
-      <button type="button" class="add-btn" id="addAffinityBtn">項目追加 (最大4つまで)</button>
+      <button type="button" class="add-btn" id="addAffinityBtn">項目追加 (最大5つまで)</button>
 
       <div class="checkbox-group" style="margin-top: 8px;">
         <label class="checkbox-label"><input type="checkbox" id="affinityOrSearch"> OR検索</label>
@@ -896,7 +896,7 @@
     <div>
       <div class="section-title">・ 習得技</div>
       <div id="moveInputsContainer"></div>
-      <button type="button" class="add-btn" id="addMoveBtn">項目追加 (最大4つまで)</button>
+      <button type="button" class="add-btn" id="addMoveBtn">項目追加 (最大5つまで)</button>
 
       <div class="checkbox-group" style="margin-top: 8px;">
         <label class="checkbox-label"><input type="checkbox" id="moveOrSearch"> OR検索</label>
@@ -909,7 +909,7 @@
     <div>
       <div class="section-title">・ 技1タイプ</div>
       <div id="move1TypeInputsContainer"></div>
-      <button type="button" class="add-btn" id="addMove1TypeBtn">項目追加 (最大4つまで)</button>
+      <button type="button" class="add-btn" id="addMove1TypeBtn">項目追加 (最大5つまで)</button>
 
       <div class="checkbox-group" style="margin-top: 8px;">
         <label class="checkbox-label"><input type="checkbox" id="move1TypeOrSearch"> OR検索</label>
@@ -922,7 +922,7 @@
     <div>
       <div class="section-title">・ 技2タイプ</div>
       <div id="move2TypeInputsContainer"></div>
-      <button type="button" class="add-btn" id="addMove2TypeBtn">項目追加 (最大4つまで)</button>
+      <button type="button" class="add-btn" id="addMove2TypeBtn">項目追加 (最大5つまで)</button>
 
       <div class="checkbox-group" style="margin-top: 8px;">
         <label class="checkbox-label"><input type="checkbox" id="move2TypeOrSearch"> OR検索</label>
@@ -1521,7 +1521,7 @@
     }
   });
 
-  function setupDynamicSection(containerId, addBtnId, placeholder, condType = null, initialCount = 2, maxCount = 4, listType = null) {
+  function setupDynamicSection(containerId, addBtnId, placeholder, condType = null, initialCount = 2, maxCount = 5, listType = null) {
     const container = document.getElementById(containerId);
     const addBtn = document.getElementById(addBtnId);
 
@@ -1605,11 +1605,11 @@
     }
     moveMasterList = Array.from(moveSet);
 
-    setupDynamicSection('posTypeInputsContainer', 'addPosTypeBtn', '', 'possession', 2, 4, 'type');
-    setupDynamicSection('affinityInputsContainer', 'addAffinityBtn', '', 'affinity', 2, 4, 'type');
-    setupDynamicSection('moveInputsContainer', 'addMoveBtn', '', null, 2, 4, 'move');
-    setupDynamicSection('move1TypeInputsContainer', 'addMove1TypeBtn', '', null, 2, 4, 'type');
-    setupDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', null, 2, 4, 'type');
+    setupDynamicSection('posTypeInputsContainer', 'addPosTypeBtn', '', 'possession', 2, 6, 'type');
+    setupDynamicSection('affinityInputsContainer', 'addAffinityBtn', '', 'affinity', 2, 5, 'type');
+    setupDynamicSection('moveInputsContainer', 'addMoveBtn', '', null, 2, 5, 'move');
+    setupDynamicSection('move1TypeInputsContainer', 'addMove1TypeBtn', '', null, 2, 5, 'type');
+    setupDynamicSection('move2TypeInputsContainer', 'addMove2TypeBtn', '', null, 2, 5, 'type');
   });
 
   document.getElementById('execSearchBtn').addEventListener('click', () => {
