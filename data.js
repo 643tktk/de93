@@ -3805,7 +3805,7 @@ const POKEMON_DATA = {
     "291":               {"dex":  291,"name": "テッカニン", "nameEn": "Ninjask",
         "types": ["むし", "ひこう"],
         "stats": { "atk": 199, "def": 112, "hp": 156 },
-        "move1": ["れんびり", "メタルクロー"],
+        "move1": ["れんぞくぎり", "メタルクロー"],
         "LegacyMove1": [],
         "move2": ["つばめがえし", "むしのさざめき", "シャドーボール"],
         "LegacyMove2": [],
