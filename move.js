@@ -234,7 +234,7 @@ const MOVES = {
         /* いわ (Rock) */
         "いわおとし": {
             nameEn: "Rock Throw",
-            type: "いわ", pwr: 8, eng: 5, turns: 2 },
+            type: "いわ", pwr: 8, eng: 4, turns: 2 },
         "うちおとす": {
             nameEn: "Smack Down",
             type: "いわ", pwr: 11, eng: 8, turns: 3 },
@@ -415,7 +415,7 @@ const MOVES = {
             chance: 1.0 },
         "こがらしあらし": {
             nameEn: "Bleakwind Storm",
-            type: "ひこう", pwr: 60, eng: 45,
+            type: "ひこう", pwr: 70, eng: 45,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 1.0 },
         "ゴッドバード": {
@@ -500,8 +500,8 @@ const MOVES = {
             effects: [{ target: "self",     stat: "atk", stage:  1}],
             chance: 1.0 },
         "ねっぷう": {
-            nameEn: "",
-            type: "ほのお", pwr: 75, eng: 45 },
+            nameEn: "Heat Wave",
+            type: "ほのお", pwr: 85, eng: 45 },
         "はじけるほのお": {
             nameEn: "Flame Burst",
             type: "ほのお", pwr: 70, eng: 55 },
@@ -701,7 +701,7 @@ const MOVES = {
             type: "でんき", pwr: 100, eng: 60 },
         "かみなりあらし": {
             nameEn: "Wildbolt Storm",
-            type: "でんき", pwr: 60, eng: 45,
+            type: "でんき", pwr: 70, eng: 45,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 1.0 },
         "かみなりパンチ": {
@@ -785,7 +785,7 @@ const MOVES = {
             type: "こおり", pwr: 120, eng: 55 },
         "トリプルアクセル": {
             nameEn: "Triple Axel",
-            type: "こおり", pwr: 60, eng: 45,
+            type: "こおり", pwr: 60, eng: 40,
             effects: [{ target: "self",     stat: "atk", stage:  1}],
             chance: 1.0 },
         "ふぶき": {
@@ -832,7 +832,7 @@ const MOVES = {
             chance: 1.0 },
         "クロスチョップ": {
             nameEn: "Cross Chop",
-            type: "かくとう", pwr: 55, eng: 35 },
+            type: "かくとう", pwr: 60, eng: 35 },
         "じごくぐるま": {
             nameEn: "Submission",
             type: "かくとう", pwr: 60, eng: 50 },
@@ -919,7 +919,7 @@ const MOVES = {
             type: "じめん", pwr: 100, eng: 55 },
         "あなをほる": {
             nameEn: "Dig",
-            type: "じめん", pwr: 70, eng: 50 },
+            type: "じめん", pwr: 70, eng: 45 },
         "じしん": {
             nameEn: "Earhtquake",
             type: "じめん", pwr: 120, eng: 65 },
@@ -946,10 +946,10 @@ const MOVES = {
             type: "じめん", pwr: 70, eng: 40 },
         "どろばくだん": {
             nameEn: "Mud Bomb",
-            type: "じめん", pwr: 65, eng: 45 },
+            type: "じめん", pwr: 75, eng: 50 },
         "ねっさのあらし": {
             nameEn: "Sandsear Storm",
-            type: "じめん", pwr: 60, eng: 45,
+            type: "じめん", pwr: 70, eng: 45,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 1.0 },
         "ねっさのだいち": {
@@ -988,7 +988,7 @@ const MOVES = {
             chance: 1.0 },
         "サイコブレイク": {
             nameEn: "Psystrike",
-            type: "エスパー", pwr: 90, eng: 45 },
+            type: "エスパー", pwr: 90, eng: 50 },
         "シンクロノイズ": {
             nameEn: "Synchronoise",
             type: "エスパー", pwr: 80, eng: 50 },
@@ -1055,7 +1055,7 @@ const MOVES = {
         /* いわ (Rock) */
         "いわなだれ": {
             nameEn: "Rock Slide",
-            type: "いわ", pwr: 75, eng: 45 },
+            type: "いわ", pwr: 70, eng: 40 },
         "ウェザーボール(岩)": {
             nameEn: "Weather Ball (Rock)",
             type: "いわ", pwr: 60, eng: 35 },
@@ -1232,7 +1232,7 @@ const MOVES = {
             chance: 1.0 },
         "ぶんまわす": {
             nameEn: "Brutal Swing",
-            type: "あく", pwr: 55, eng: 35 },
+            type: "あく", pwr: 60, eng: 35 },
 
         /* はがね (Steel) */
         "アイアンヘッド": {
