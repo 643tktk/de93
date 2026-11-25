@@ -82,6 +82,9 @@ const MOVES = {
         "みずでっぽう": {
             nameEn: "Water Gun",
             type: "みず", pwr: 3, eng: 3, turns: 1 },
+        "みずびたし": {
+            nameEn: "Soak",
+            type: "みず", pwr: 6, eng: 8, turns: 3 },
         "めざめるパワー(水)": {
             nameEn: "Hidden Power (Water)",
             type: "みず", pwr: 9, eng: 8, turns: 3 },
@@ -620,6 +623,11 @@ const MOVES = {
         "ひやみず": {
             nameEn: "Chilling Water",
             type: "みず", pwr: 60, eng: 45,
+            effects: [{ target: "opponent", stat: "atk", stage: -1}],
+            chance: 1.0 },
+        "ひやみず+": {
+            nameEn: "Chilling Water+",
+            type: "みず", pwr: 45, eng: 40,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 1.0 },
         "みずのはどう": {

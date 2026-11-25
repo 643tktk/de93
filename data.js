@@ -1223,7 +1223,7 @@ const POKEMON_DATA = {
         "stats": { "atk": 224, "def": 259, "hp": 216 },
         "move1": ["みずでっぽう", "ねんりき"],
         "LegacyMove1": [],
-        "move2": ["ドレインパンチ", "みずのはどう", "ねっとう", "サイコキネシス", "れいとうビーム"],
+        "move2": ["ドレインパンチ", "みずのはどう", "ねっとう", "サイコキネシス", "れいとうビーム", "ひやみず+"],
         "LegacyMove2": ["なみのり", "おんがえし"],
         "released": true,
         "category": ["mega"]
@@ -10075,11 +10075,11 @@ const POKEMON_DATA = {
     "771":               {"dex":  771,"name": "ナマコブシ", "nameEn": "Pyukumuku",
         "types": ["みず"],
         "stats": { "atk": 97, "def": 224, "hp": 146 },
-        "move1": [],
+        "move1": ["カウンター", "みずびたし"],
         "LegacyMove1": [],
-        "move2": [],
+        "move2": ["ミラーコート"],
         "LegacyMove2": [],
-        "released": false,
+        "released": true,
         "category": ["normal"]
     },
     "772":               {"dex":  772,"name": "タイプ:ヌル", "nameEn": "Type: Null",
