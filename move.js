@@ -1304,7 +1304,7 @@ const MOVES = {
             chance: 0.1 },
         "ムーンフォース+": {
             nameEn: "Moonblast",
-            type: "フェアリー", pwr: 80, eng: 45,
+            type: "フェアリー", pwr: 80, eng: 50,
             effects: [{ target: "opponent", stat: "atk", stage: -1}],
             chance: 0.1 }
     }
